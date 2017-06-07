@@ -10,7 +10,7 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 	relative_path=$(realpath --relative-to="$dir" "$f")
 	container=$(dirname "$relative_path")
 	mkdir -p "$HOME/$container"
-	cp -i "$f" "$HOME/$relative_path"
+	cp -ibS '.bak' "$f" "$HOME/$relative_path"
 
 	if [ "$container" = ".gnupg" ]; then
 		chmod 700 "$HOME/$container"
