@@ -1,0 +1,12 @@
+[user]
+	name = Jeremiah Megel
+	email = git@jeremiahm.com
+	signingkey = 0x910FB4D15EC801AB
+[core]
+	editor = vim
+[push]
+	default = simple
+[commit]
+	verbose = 2
+[gpg]
+	program = gpg2
