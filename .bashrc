@@ -75,7 +75,7 @@ xterm*|rxvt*)
 *)
     ;;
 esac
-PROMPT_COMMAND='echo -en "\033]0;$(whoami)@$(hostname):$(dirs -0)$(__git_ps1 " (%s)")\a"'
+PROMPT_COMMAND='echo -en "\033]0;$(whoami)@$(hostname -s):$(dirs -0)$(__git_ps1 " (%s)")\a"'
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
