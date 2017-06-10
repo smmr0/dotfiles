@@ -18,7 +18,6 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 		echo -n "Do you want to replace ~/$relative_path (backed up as *.bak)? (y/n) "
 		read -n 1 resp
 		resp=$(echo -n "$resp" | tr '[:upper:]' '[:lower:]')
-		echo "$resp"
 		if [ "$resp" = 'y' ]; then
 			mv "$dest" "$dest.bak"
 		else
