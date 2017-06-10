@@ -133,5 +133,3 @@ fi
 
 
 shopt -s globstar
-alias sshvps='ssh jm@megelvps.jeremiahm.com'
-alias apod='apod ~/Pictures/Wallpapers/apod.jpg'
