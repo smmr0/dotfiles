@@ -15,14 +15,17 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 	mkdir -p "$dest_container"
 
 	if [ -s "$dest" ]; then
-		echo -n "Do you want to replace ~/$relative_path (backed up as *.bak)? (y/n) "
-		read -n 1 resp
-		resp=$(echo -n "$resp" | tr '[:upper:]' '[:lower:]')
-		if [ "$resp" = 'y' ]; then
-			mv "$dest" "$dest.bak"
-		else
-			continue
-		fi
+		resp=
+		until [ "$resp" = "y" -o "$resp" = "n" ]; do
+			echo -n "Do you want to replace ~/$relative_path (backed up as *.bak)? (y/n) "
+			read resp
+			resp=$(echo -n "${resp:0:1}" | tr '[:upper:]' '[:lower:]')
+			if [ "$resp" = 'y' ]; then
+				mv "$dest" "$dest.bak"
+			else
+				continue
+			fi
+		done
 	fi
 	cp "$f" "$dest"
 
