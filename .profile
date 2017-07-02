@@ -44,3 +44,5 @@ fi
 
 # http://membled.com/work/apps/pathmerge/
 PATH=$(pathmerge $PATH)
+
+[ -f "$HOME/.env" ] && . "$HOME/.env"
