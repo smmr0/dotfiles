@@ -14,6 +14,10 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 
 	mkdir -p "$dest_container"
 
+	if diff -q "$f" "$dest" &> /dev/null; then
+		continue
+	fi
+
 	if [ -s "$dest" ]; then
 		resp=
 		until [ "$resp" = "y" -o "$resp" = "n" ]; do
