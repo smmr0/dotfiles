@@ -20,7 +20,7 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 
 	if [ -s "$dest" ]; then
 		resp=
-		until [ "$resp" = "y" -o "$resp" = "n" ]; do
+		until [ "$resp" = 'y' -o "$resp" = 'n' ]; do
 			echo -n "Do you want to replace ~/$relative_path (backed up as *.bak)? (y/n) "
 			read resp
 			resp=$(echo -n "${resp:0:1}" | tr '[:upper:]' '[:lower:]')
@@ -33,12 +33,12 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 	fi
 	cp "$f" "$dest"
 
-	if [ "$container" = ".gnupg" ]; then
+	if [ "$container" = '.gnupg' ]; then
 		chmod 700 "$dest_container"
 		chmod 600 "$dest"
 	fi
 
-	if [ "$container" = ".local/bin" ]; then
+	if [ "$container" = '.local/bin' ]; then
 		chmod +x "$dest"
 	fi
 done
