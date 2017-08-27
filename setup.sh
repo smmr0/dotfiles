@@ -27,7 +27,7 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 			if [ "$resp" = 'y' ]; then
 				mv "$dest" "$dest.bak"
 			else
-				continue
+				continue 2
 			fi
 		done
 	fi
