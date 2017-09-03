@@ -39,7 +39,7 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 	fi
 
 	if [ "$container" = '.local/bin' ]; then
-		chmod +x "$dest"
+		chmod 755 "$dest"
 	fi
 done
 
