@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 # Run this script at terminal startup to start a new tmux session in a
 # directory specified by $NEWPWD, connect to the most recently detached tmux
