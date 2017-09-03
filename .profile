@@ -4,10 +4,6 @@ if [ -n "$BASH_VERSION" ]; then
 	fi
 fi
 
-if [ -d "$HOME/bin" ] ; then
-	PATH="$HOME/bin:$PATH"
-fi
-
 if [ -d "$HOME/.rbenv/bin" ]; then
 	PATH="$HOME/.rbenv/bin:$PATH"
 fi
@@ -33,6 +29,10 @@ fi
 
 if [ -d "$HOME/.local/bin" ]; then
 	PATH="$HOME/.local/bin:$PATH"
+fi
+
+if [ -d "$HOME/bin" ] ; then
+	PATH="$HOME/bin:$PATH"
 fi
 
 # http://membled.com/work/apps/pathmerge/
