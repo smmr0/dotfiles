@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Run this script at terminal startup to start a new tmux session in a
+# directory specified by $NEWPWD, connect to the most recently detached tmux
+# session, or start a new tmux session in the home directory (in that priority)
+
+if [ -n "$NEWPWD" ]; then
+	cd "$NEWPWD"
+	tmux
+else
+	last_tmux_sess=$(tmux ls -F '#{?session_attached,,#{session_activity} #{session_name}}' | sort -r | head -1 | sed 's/^[^ ]* //')
+	if [ -n "$last_tmux_sess" ]; then
+		tmux a -t "$last_tmux_sess"
+	else
+		tmux
+	fi
+fi
