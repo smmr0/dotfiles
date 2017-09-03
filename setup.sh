@@ -22,13 +22,15 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 	if [ -s "$dest" ]; then
 		resp=
 		until [ "$resp" = 'y' -o "$resp" = 'n' ]; do
-			echo -n "Do you want to replace ~/$relative_path (backed up as *.bak)? (y/n/d) "
+			echo -n "Do you want to replace ~/$relative_path (backed up as *.bak)? (y/n/d/q) "
 			read resp
 			resp=$(echo -n "${resp:0:1}" | tr '[:upper:]' '[:lower:]')
 			if [ "$resp" = 'y' ]; then
 				mv "$dest" "$dest.bak"
 			elif [ "$resp" = 'd' ]; then
 				diff "$dest" "$f"
+			elif [ "$resp" = 'q' ]; then
+				exit 0
 			else
 				continue 2
 			fi
