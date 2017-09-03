@@ -15,6 +15,7 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 	mkdir -p "$dest_container"
 
 	if diff -q "$f" "$dest" &> /dev/null; then
+		echo "Skipping identical $relative_path"
 		continue
 	fi
 
@@ -31,6 +32,7 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 			fi
 		done
 	fi
+	echo "Copying $relative_path"
 	cp "$f" "$dest"
 
 	if [ "$container" = '.gnupg' ]; then
@@ -43,4 +45,7 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 	fi
 done
 
+echo 'Reloading ~/.profile'
 source ~/.profile
+
+echo 'Done'
