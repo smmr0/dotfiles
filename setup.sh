@@ -49,7 +49,4 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 	fi
 done
 
-echo 'Reloading ~/.profile'
-source ~/.profile
-
 echo 'Done'
