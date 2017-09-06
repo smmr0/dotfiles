@@ -4,6 +4,10 @@
 # directory specified by $NEWPWD, connect to the most recently detached tmux
 # session, or start a new tmux session in the home directory (in that priority)
 
+if [ -f "$HOME/.profile" ]; then
+	source "$HOME/.profile"
+fi
+
 if [ -n "$NEWPWD" ]; then
 	cd "$NEWPWD"
 	tmux
