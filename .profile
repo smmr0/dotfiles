@@ -13,7 +13,7 @@ if [ -d "$HOME/.rbenv/plugins/ruby-build/bin" ]; then
 fi
 
 # https://stackoverflow.com/a/677212/2384183
-if command -v rbenv >/dev/null 2>&1; then
+if command -v rbenv > /dev/null 2>&1; then
 	eval "$(rbenv init -)"
 fi
 
