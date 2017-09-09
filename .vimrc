@@ -6,6 +6,8 @@ set list lcs=tab:\ \
 set number
 set splitbelow
 set splitright
+set ignorecase
+set smartcase
 command W w
 command Q q
 command WQ wq
