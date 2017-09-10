@@ -1,5 +1,5 @@
 if [ -f "$HOME/.env" ]; then
-	. "$HOME/.env"
+	source "$HOME/.env"
 fi
 
 if [ -n "$BASH_VERSION" ]; then
