@@ -66,7 +66,11 @@ GIT_PS1_SHOWUNTRACKEDFILES=true
 GIT_PS1_SHOWUPSTREAM=auto
 GIT_PS1_STATESEPARATOR=
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 "@\[\033[01;35m\]%s\[\033[00m\]")\[\033[32m\]\$\[\033[00m\] '
+    if [ -n "$POWERLINE" ]; then
+        PS1='${debian_chroot:+($debian_chroot)}\[\033[1;30;42m\]\u@\h\[\033[21;32;44m\]\[\033[1;30m\]\w\[\033[34m\]$(__git_ps1 "\[\033[21;34;45m\]\[\033[1;30m\]%s\[\033[35m\]")\[\033[49m\]\[\033[0m\]'
+    else
+        PS1='${debian_chroot:+($debian_chroot)}\[\033[1;32m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[0m\]$(__git_ps1 "@\[\033[1;35m\]%s\[\033[0m\]")\[\033[32m\]\$\[\033[0m\] '
+    fi
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 "@%s")\$ '
 fi
