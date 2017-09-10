@@ -14,3 +14,6 @@ command WQ wq
 command Wq wq
 filetype plugin indent on
 syntax on
+
+set background=dark
+colorscheme solarized
