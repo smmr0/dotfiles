@@ -1,3 +1,7 @@
+if [ -f "$HOME/.env" ]; then
+	. "$HOME/.env"
+fi
+
 if [ -n "$BASH_VERSION" ]; then
 	if [ -f "$HOME/.bashrc" ]; then
 		source "$HOME/.bashrc"
@@ -37,7 +41,3 @@ fi
 
 # http://membled.com/work/apps/pathmerge/
 export PATH="$(pathmerge $PATH)"
-
-if [ -f "$HOME/.env" ]; then
-	. "$HOME/.env"
-fi
