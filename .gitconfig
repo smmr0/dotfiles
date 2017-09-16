@@ -10,3 +10,5 @@
 	verbose = 2
 [gpg]
 	program = gpg2
+[include]
+	path = ~/.gitconfig.local
