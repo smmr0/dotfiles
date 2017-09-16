@@ -132,11 +132,11 @@ fi
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-  if [ -f '/usr/share/bash-completion/bash_completion' ]; then
-    source '/usr/share/bash-completion/bash_completion'
-  elif [ -f '/etc/bash_completion' ]; then
-    source '/etc/bash_completion'
-  elif [ -f '/usr/local/etc/bash_completion' ]; then
-    source '/usr/local/etc/bash_completion'
-  fi
+	if [ -f '/etc/bash_completion' ]; then
+		source '/etc/bash_completion'
+	fi
+
+	if [ -f '/usr/local/etc/bash_completion' ]; then
+		source '/usr/local/etc/bash_completion'
+	fi
 fi
