@@ -139,4 +139,8 @@ if ! shopt -oq posix; then
 	if [ -f '/usr/local/etc/bash_completion' ]; then
 		source '/usr/local/etc/bash_completion'
 	fi
+
+	if [ -f "$HOME/.local/etc/bash_completion" ]; then
+		source "$HOME/.local/etc/bash_completion"
+	fi
 fi
