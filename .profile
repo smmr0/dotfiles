@@ -22,7 +22,6 @@ if command -v rbenv > /dev/null 2>&1; then
 fi
 
 if [ -d '/usr/local/go' ]; then
-	export GOROOT='/usr/local/go'
 	PATH="$GOROOT/bin:$PATH"
 fi
 
