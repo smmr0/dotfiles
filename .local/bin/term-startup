@@ -5,7 +5,7 @@
 # session, or start a new tmux session in the home directory (in that priority)
 
 if [ -f "/etc/profile" ]; then
-	source "/etc/profile"
+	. "/etc/profile"
 fi
 
 if [ -n "$NEWPWD" ]; then

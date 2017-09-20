@@ -59,7 +59,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 # Modified from Ubuntu's defaults to include Git prompt
-source ~/.local/share/git/git-prompt.sh
+. ~/.local/share/git/git-prompt.sh
 GIT_PS1_SHOWDIRTYSTATE=true
 GIT_PS1_SHOWSTASHSTATE=true
 GIT_PS1_SHOWUNTRACKEDFILES=true
@@ -121,11 +121,11 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 if [ -f "$HOME/.bash_aliases" ]; then
-    source "$HOME/.bash_aliases"
+    . "$HOME/.bash_aliases"
 fi
 
 if [ -f "$HOME/.bash_aliases.local" ]; then
-    source "$HOME/.bash_aliases.local"
+    . "$HOME/.bash_aliases.local"
 fi
 
 # enable programmable completion features (you don't need to enable
@@ -133,14 +133,14 @@ fi
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
 	if [ -f '/etc/bash_completion' ]; then
-		source '/etc/bash_completion'
+		. '/etc/bash_completion'
 	fi
 
 	if [ -f '/usr/local/etc/bash_completion' ]; then
-		source '/usr/local/etc/bash_completion'
+		. '/usr/local/etc/bash_completion'
 	fi
 
 	if [ -f "$HOME/.local/etc/bash_completion" ]; then
-		source "$HOME/.local/etc/bash_completion"
+		. "$HOME/.local/etc/bash_completion"
 	fi
 fi
