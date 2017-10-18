@@ -12,3 +12,5 @@
 	program = gpg2
 [include]
 	path = ~/.gitconfig.local
+[fetch]
+	prune = true
