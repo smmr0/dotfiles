@@ -8,6 +8,8 @@ set splitbelow
 set splitright
 set ignorecase
 set smartcase
+set incsearch
+set hlsearch
 command W w
 command Q q
 command WQ wq
