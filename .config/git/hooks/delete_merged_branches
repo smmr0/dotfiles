@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+branches_without_current() {
+	grep -v '^*' | sed 's/^[[:space:]]*//'
+}
+
+delete_if_obsolete() {
+	branch="$1"
+
+	# Return unless branch is behind or equal to its upstream branch
+	if [ "$(git rev-list --left-only --count "$branch"..."$branch"@{u} 2> /dev/null)" != '0' ]; then return; fi
+
+	git branch -d "$branch"
+}
+
+# Delete branches merged to origin's default branch
+git branch --merged origin/HEAD 2> /dev/null | branches_without_current | while read branch; do git branch -d "$branch"; done
+
+# Delete branches that are behind or equal to their upstream branches
+git branch | branches_without_current | while read branch; do delete_if_obsolete "$branch"; done

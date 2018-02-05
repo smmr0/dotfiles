@@ -4,6 +4,7 @@
 	signingkey = 0x910FB4D15EC801AB
 [core]
 	editor = vim
+	hooksPath = ~/.config/git/hooks
 [push]
 	default = simple
 [commit]
