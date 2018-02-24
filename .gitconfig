@@ -15,3 +15,5 @@
 	path = ~/.gitconfig.local
 [fetch]
 	prune = true
+[merge]
+	conflictStyle = diff3
