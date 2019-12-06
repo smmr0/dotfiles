@@ -21,6 +21,15 @@ if command -v rbenv > /dev/null 2>&1; then
 	eval "$(rbenv init -)"
 fi
 
+
+if [ -d "$HOME/.nvm" ]; then
+	export NVM_DIR="$HOME/.nvm"
+
+	if [ -s "$NVM_DIR/nvm.sh" ]; then
+		. "$NVM_DIR/nvm.sh"
+	fi
+fi
+
 if [ -d '/usr/local/go' ]; then
 	PATH="$GOROOT/bin:$PATH"
 fi
