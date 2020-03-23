@@ -2,12 +2,6 @@ if [ -f "$HOME/.env" ]; then
 	. "$HOME/.env"
 fi
 
-if [ -n "$BASH_VERSION" ]; then
-	if [ -f "$HOME/.bashrc" ]; then
-		. "$HOME/.bashrc"
-	fi
-fi
-
 if [ -d "$HOME/.rbenv/bin" ]; then
 	PATH="$HOME/.rbenv/bin:$PATH"
 fi
@@ -49,3 +43,9 @@ fi
 
 # http://membled.com/work/apps/pathmerge/
 export PATH="$(pathmerge $PATH)"
+
+if [ -n "$BASH_VERSION" ]; then
+	if [ -f "$HOME/.bashrc" ]; then
+		. "$HOME/.bashrc"
+	fi
+fi
