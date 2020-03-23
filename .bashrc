@@ -145,4 +145,10 @@ if ! shopt -oq posix; then
 	if [ -f "$HOME/.local/etc/bash_completion" ]; then
 		. "$HOME/.local/etc/bash_completion"
 	fi
+
+	if [ -n "$NVM_DIR" ]; then
+		if [ -f "$NVM_DIR/bash_completion" ]; then
+			. "$NVM_DIR/bash_completion"
+		fi
+	fi
 fi
