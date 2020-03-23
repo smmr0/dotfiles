@@ -151,4 +151,8 @@ if ! shopt -oq posix; then
 			. "$NVM_DIR/bash_completion"
 		fi
 	fi
+
+	if command -v doctl > /dev/null 2>&1; then
+		source <(doctl completion bash)
+	fi
 fi
