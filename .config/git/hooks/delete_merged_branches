@@ -1,5 +1,10 @@
 #!/usr/bin/env sh
 
+# Exit unless HEAD is a branch (not commit or tag)
+if ! git symbolic-ref HEAD > /dev/null 2>&1; then
+	exit 0
+fi
+
 branches_without_current() {
 	grep -v '^*' | sed 's/^[[:space:]]*//'
 }
