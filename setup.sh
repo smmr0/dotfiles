@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euf -o pipefail
+
 # https://stackoverflow.com/a/246128/2384183
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
