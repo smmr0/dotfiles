@@ -3,7 +3,7 @@
 set -euf
 if set -o | grep -q '^pipefail\s'; then
 	set -o pipefail
-end
+fi
 
 # Exit unless HEAD is a branch (not commit or tag)
 if ! git symbolic-ref HEAD > /dev/null 2>&1; then
