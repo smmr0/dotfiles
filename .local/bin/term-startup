@@ -12,7 +12,7 @@ if [ -n "$NEWPWD" ]; then
 	cd "$NEWPWD"
 	tmux
 else
-	last_tmux_sess=$(tmux ls -F '#{?session_attached,,#{session_activity} #{session_name}}' 2> /dev/null | sort -r | head -1 | sed 's/^[^ ]* //')
+	last_tmux_sess="$(tmux ls -F '#{?session_attached,,#{session_activity} #{session_name}}' 2> /dev/null | sort -r | head -1 | sed 's/^[^ ]* //')"
 	if [ -n "$last_tmux_sess" ]; then
 		tmux a -t "$last_tmux_sess"
 	else
