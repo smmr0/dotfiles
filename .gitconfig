@@ -7,6 +7,8 @@
 	hooksPath = ~/.config/git/hooks
 [push]
 	default = simple
+[pull]
+	rebase = false
 [commit]
 	verbose = 2
 [gpg]
