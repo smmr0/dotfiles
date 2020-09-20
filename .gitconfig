@@ -5,19 +5,19 @@
 [core]
 	editor = vim
 	hooksPath = ~/.config/git/hooks
+[init]
+	defaultBranch = main
 [push]
 	default = simple
 [pull]
 	rebase = false
+[fetch]
+	prune = true
+[merge]
+	conflictStyle = diff3
 [commit]
 	verbose = 2
 [gpg]
 	program = gpg2
 [include]
 	path = ~/.gitconfig.local
-[fetch]
-	prune = true
-[merge]
-	conflictStyle = diff3
-[init]
-	defaultBranch = main
