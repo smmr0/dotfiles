@@ -8,8 +8,7 @@ if [ -f '/etc/profile' ]; then
 	. '/etc/profile'
 fi
 
-if [ -n "$NEWPWD" ]; then
-	cd "$NEWPWD"
+if [ "$PWD" != "$HOME" ]; then
 	tmux
 else
 	last_tmux_sess="$(tmux ls -F '#{?session_attached,,#{session_activity} #{session_name}}' 2> /dev/null | sort -r | head -1 | sed 's/^[^ ]* //')"
