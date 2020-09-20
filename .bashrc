@@ -134,12 +134,12 @@ fi
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-	if [ -f '/etc/bash_completion' ]; then
-		. '/etc/bash_completion'
+	if [ -f "$PREFIX/etc/bash_completion" ]; then
+		. "$PREFIX/etc/bash_completion"
 	fi
 
-	if [ -f '/usr/local/etc/bash_completion' ]; then
-		. '/usr/local/etc/bash_completion'
+	if [ -f "$PREFIX/usr/local/etc/bash_completion" ]; then
+		. "$PREFIX/usr/local/etc/bash_completion"
 	fi
 
 	if [ -f "$HOME/.local/etc/bash_completion" ]; then
