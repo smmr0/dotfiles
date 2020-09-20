@@ -30,7 +30,7 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -
 			if [ "$resp" = 'y' ]; then
 				mv "$dest" "$dest.bak"
 			elif [ "$resp" = 'd' ]; then
-				diff "$dest" "$f"
+				diff "$dest" "$f" || true
 			elif [ "$resp" = 'q' ]; then
 				exit 0
 			else
