@@ -35,4 +35,5 @@ Pry.config.prompt =
       Pry::Prompt[:custom]
     end
   end
+Pry.config.prompt_name = 'rails' if defined?(Rails)
 Pry.config.color = true if ENV['RM_INFO'] # RubyMine
