@@ -39,8 +39,7 @@ Pry::Prompt.add(
 end
 
 Pry.config.prompt =
-  case IRB.conf[:PROMPT_MODE]
-  when :SIMPLE
+  if defined?(IRB) && IRB.conf[:PROMPT_MODE] == :SIMPLE
     Pry::Prompt[:simple]
   else
     if Pry.config.color && ENV['POWERLINE'] == '1'
