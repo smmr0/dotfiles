@@ -23,8 +23,14 @@ delete_if_obsolete() {
 	git branch -d "$branch"
 }
 
-# Delete branches merged to origin's default branch
-git branch --merged origin/HEAD 2> /dev/null | branches_without_current | while read branch; do git branch -d "$branch"; done
+# Delete branches merged to current remote's default branch
+if git config "branch.$(git branch --show-current).remote"; then
+  remote="$(git config "branch.$(git branch --show-current).remote")"
+else
+  remote='origin'
+fi
+remote_default_branch="$(git remote show "$remote" | grep '^\s*HEAD branch' | sed 's/^[ \t]*HEAD branch:[ \t]*//')"
+git branch --merged "$remote/$remote_default_branch" 2> /dev/null | branches_without_current | while read branch; do git branch -d "$branch"; done
 
 # Delete branches that are behind or equal to their upstream branches
 git branch | branches_without_current | while read branch; do delete_if_obsolete "$branch"; done
