@@ -9,7 +9,7 @@ if ENV['FORCE_PRY'] == '1'
     else
       Gem::LoadError
     end
-  spec =
+  pry_rails_spec =
     2.times do
       begin
         Gem::Specification.class_variable_set(:@@stubs, nil)
@@ -22,10 +22,10 @@ if ENV['FORCE_PRY'] == '1'
         end
       end
     end
-  specs = [spec]
+  specs = [pry_rails_spec]
   specs.each do |spec|
     # https://makandracards.com/makandra/45308-howto-require-gem-that-is-not-in-gemfile
-    $: << "#{spec.full_gem_path}/#{spec.require_path}"
+    $LOAD_PATH << "#{spec.full_gem_path}/#{spec.require_path}"
 
     spec.runtime_dependencies.each do |dep|
       specs << dep.to_spec

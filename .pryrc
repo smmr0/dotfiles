@@ -1,7 +1,7 @@
 Pry.config.color =
   ENV['TERM'] == 'xterm-color' ||
-    ENV['TERM'].end_with?('-256color') ||
-    ENV['RM_INFO'] # RubyMine
+  ENV['TERM'].end_with?('-256color') ||
+  ENV['RM_INFO'] # RubyMine
 
 Pry::Prompt.add(
   :custom,
@@ -12,14 +12,14 @@ Pry::Prompt.add(
       \033[1;35m#{pry_instance.config.prompt_name}
       \033[0m(\033[1;34m#{context}\033[0m)
       #{":\033[32m#{nesting}" unless nesting.zero?}
-      \033[0m#{sep}#{' '}
+      \033[0m#{"#{sep} "}
     PROMPT
   else
     <<-PROMPT.gsub(/(\A|\n)\s*/, '')
       #{pry_instance.config.prompt_name}
       (#{context})
       #{":#{nesting}" unless nesting.zero?}
-      #{sep}#{' '}
+      #{"#{sep} "}
     PROMPT
   end
 end
@@ -29,8 +29,8 @@ Pry::Prompt.add(
   %w[> *]
 ) do |context, nesting, pry_instance, sep|
   <<-PROMPT.gsub(/(\A|\n)\s*/, '')
-    \033[1;97;#{case sep; when '>'; '45'; when '*'; '43'; end}m#{pry_instance.config.prompt_name}
-    \033[21;#{case sep; when '>'; '35'; when '*'; '33'; end};44m
+    \033[1;97;#{case sep; when '>' then '45'; when '*' then '43'; end}m#{pry_instance.config.prompt_name}
+    \033[21;#{case sep; when '>' then '35'; when '*' then '33'; end};44m
     \033[1;97;44m#{context}
     #{"\033[21;34;42m\033[1;97m#{nesting}" unless nesting.zero?}
     \033[21;#{nesting.zero? ? '34' : '32'};49m
