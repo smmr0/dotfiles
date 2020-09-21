@@ -1,6 +1,6 @@
 Pry.config.color =
   ENV['TERM'] == 'xterm-color' ||
-  ENV['TERM'].try(:end_with?, '-256color') ||
+  (ENV['TERM'] && ENV['TERM'].end_with?('-256color')) ||
   ENV['RM_INFO'] # RubyMine
 
 Pry::Prompt.add(
