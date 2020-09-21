@@ -18,7 +18,7 @@ delete_if_obsolete() {
 	branch="$1"
 
 	# Return unless branch is behind or equal to its upstream branch
-	if [ "$(git rev-list --left-only --count "$branch"..."$branch"@{u} 2> /dev/null)" != '0' ]; then return; fi
+	if [ "$(git rev-list --left-only --count "$branch"..."$branch"@{upstream} 2> /dev/null)" != '0' ]; then return; fi
 
 	git branch -d "$branch"
 }
