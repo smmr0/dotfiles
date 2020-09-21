@@ -35,8 +35,14 @@ if ENV['FORCE_PRY'] == '1'
   Gem::Specification.class_variable_set(:@@stubs, old_stubs)
   if defined?(Rails)
     Rails.application.config.console = Pry
+
+    rails_logger_extend_method = Rails.logger.method(:extend)
+    Rails.logger.define_singleton_method(:extend) { |*_args| }
     Rails.application.load_console
+    Rails.logger.define_singleton_method(:extend, rails_logger_extend_method)
+
     include(Rails::ConsoleMethods)
+
     Rails.application.config.console.start
   else
     Pry.start
