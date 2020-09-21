@@ -1,7 +1,7 @@
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 IRB.conf[:SAVE_HISTORY] = 1000
 
-if ENV['FORCE_PRY'] == '1' || true
+if ENV['FORCE_PRY'] == '1'
   old_stubs = Gem::Specification.class_variable_get(:@@stubs)
   gem_load_error =
     if defined?(Gem::MissingSpecError)
