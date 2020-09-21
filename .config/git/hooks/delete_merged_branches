@@ -11,7 +11,7 @@ if ! git symbolic-ref HEAD > /dev/null 2>&1; then
 fi
 
 branches_without_current() {
-	grep -v '^*' | sed 's/^[[:space:]]*//'
+	grep -v '^*' | sed 's/^[[:space:]]*//' || true
 }
 
 delete_if_obsolete() {
