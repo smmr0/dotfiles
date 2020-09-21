@@ -35,3 +35,4 @@ Pry.config.prompt =
       Pry::Prompt[:custom]
     end
   end
+Pry.config.color = true if ENV['RM_INFO'] # RubyMine
