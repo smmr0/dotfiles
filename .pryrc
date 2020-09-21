@@ -4,8 +4,8 @@ Pry::Prompt.add(
 ) do |context, nesting, pry_instance, sep|
   <<-PROMPT.gsub(/(\A|\n)\s*/, '')
     \033[1;35m#{pry_instance.config.prompt_name}
-    \033[0m(\033[1;34m#{context}
-    #{"\033[0m):\033[32m#{nesting}" unless nesting.zero?}
+    \033[0m(\033[1;34m#{context}\033[0m)
+    #{":\033[32m#{nesting}" unless nesting.zero?}
     \033[0m#{sep}#{' '}
   PROMPT
 end
