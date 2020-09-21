@@ -36,6 +36,7 @@ if ENV['FORCE_PRY'] == '1'
   if defined?(Rails)
     Rails.application.config.console = Pry
     Rails.application.load_console
+    include(Rails::ConsoleMethods)
     Rails.application.config.console.start
   else
     Pry.start
