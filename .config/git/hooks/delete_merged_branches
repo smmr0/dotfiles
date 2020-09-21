@@ -24,7 +24,7 @@ delete_if_obsolete() {
 }
 
 # Delete branches merged to current remote's default branch
-if git config "branch.$(git branch --show-current).remote"; then
+if git config "branch.$(git branch --show-current).remote" > /dev/null 2>&1; then
   remote="$(git config "branch.$(git branch --show-current).remote")"
 else
   remote='origin'
