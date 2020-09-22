@@ -24,7 +24,7 @@ Pry::Prompt.add(
   end
 end
 Pry::Prompt.add(
-  :powerline,
+  :custom_powerline,
   nil,
   %w[> *]
 ) do |context, nesting, pry_instance, sep|
@@ -43,7 +43,7 @@ Pry.config.prompt =
     Pry::Prompt[:simple]
   else
     if Pry.config.color && ENV['POWERLINE'] == '1'
-      Pry::Prompt[:powerline]
+      Pry::Prompt[:custom_powerline]
     else
       Pry::Prompt[:custom]
     end
