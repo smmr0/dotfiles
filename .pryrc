@@ -51,7 +51,7 @@ Pry::Prompt.add(
   if pry_instance.color
     <<-PROMPT.gsub(/(\A|\n)\s*/, '')
       \033[1;35m#{project_name}:
-      \033[1;36m#{Rails.env}
+      \033[1;#{Rails.env.production? ? '31' : '36'}m#{Rails.env}
       \033[0m(\033[1;34m#{context}\033[0m)
       #{":\033[32m#{nesting}" unless nesting.zero?}
       \033[0m#{"#{sep} "}
@@ -80,9 +80,9 @@ Pry::Prompt.add(
 
   <<-PROMPT.gsub(/(\A|\n)\s*/, '')
     \033[1;97;#{case sep; when '>' then '45'; when '*' then '43'; end}m#{project_name}
-    \033[21;#{case sep; when '>' then '35'; when '*' then '33'; end};46m
+    \033[21;#{case sep; when '>' then '35'; when '*' then '33'; end};#{Rails.env.production? ? '41' : '46'}m
     \033[1;97m#{Rails.env}
-    \033[21;36;44m
+    \033[21;#{Rails.env.production? ? '31' : '36'};44m
     \033[1;97m#{context}
     #{"\033[21;34;42m\033[1;97m#{nesting}" unless nesting.zero?}
     \033[21;#{nesting.zero? ? '34' : '32'};49m
