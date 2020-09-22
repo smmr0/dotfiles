@@ -31,7 +31,7 @@ Pry::Prompt.add(
   <<-PROMPT.gsub(/(\A|\n)\s*/, '')
     \033[1;97;#{case sep; when '>' then '45'; when '*' then '43'; end}m#{pry_instance.config.prompt_name}
     \033[21;#{case sep; when '>' then '35'; when '*' then '33'; end};44m
-    \033[1;97;44m#{context}
+    \033[1;97m#{context}
     #{"\033[21;34;42m\033[1;97m#{nesting}" unless nesting.zero?}
     \033[21;#{nesting.zero? ? '34' : '32'};49m
     \033[0m
