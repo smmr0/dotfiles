@@ -1,3 +1,13 @@
+class Pry
+  class Command
+    class Huh < Wtf
+	  match(/huh([?!]*)/)
+	  options listing: 'huh?'
+	  banner Wtf.banner.gsub('wtf', 'huh')
+    end
+  end
+end
+
 Pry.config.color =
   ENV['TERM'] == 'xterm-color' ||
   (ENV['TERM'] && ENV['TERM'].end_with?('-256color')) ||
@@ -110,3 +120,5 @@ Pry.config.prompt =
   end
 
 Pry.config.prompt_name = 'rails' if defined?(Rails)
+
+Pry::Commands.add_command(Pry::Command::Huh)
