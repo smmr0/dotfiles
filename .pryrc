@@ -1,9 +1,9 @@
 class Pry
   class Command
     class Huh < Wtf
-	  match(/huh([?!]*)/)
-	  options listing: 'huh?'
-	  banner Wtf.banner.gsub('wtf', 'huh')
+      match(/huh([?!]*)/)
+      options listing: 'huh?'
+      banner Wtf.banner.gsub('wtf', 'huh')
     end
   end
 end
