@@ -19,3 +19,6 @@ syntax on
 
 set background=light
 colorscheme solarized
+
+autocmd BufNewFile,BufRead *.pryrc set syntax=ruby
+autocmd BufNewFile,BufRead *.pryrc source $HOME/.vim/indent/ruby.vim
