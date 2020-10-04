@@ -41,14 +41,14 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 # http://membled.com/work/apps/pathmerge/
-export PATH="$(pathmerge $PATH)"
+export PATH="$(pathmerge "$PATH")"
 
 if [ -n "$XDG_DATA_DIRS" ]; then
 	if [ -d "$HOME/.local/share" ]; then
 		XDG_DATA_DIRS="$HOME/.local/share:$XDG_DATA_DIRS"
 	fi
 
-	export XDG_DATA_DIRS="$(pathmerge $XDG_DATA_DIRS)"
+	export XDG_DATA_DIRS="$(pathmerge "$XDG_DATA_DIRS")"
 fi
 
 if [ -n "$BASH_VERSION" ]; then
