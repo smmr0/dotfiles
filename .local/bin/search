@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+path="$1"
+shift
+
+# Add /dev/null so it prints the filename
+find "$path" -type f -exec grep --color=auto --line-number "$@" {} /dev/null \;
