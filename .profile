@@ -15,6 +15,19 @@ if command -v rbenv > /dev/null 2>&1; then
 	eval "$(rbenv init -)"
 fi
 
+if [ -d "$HOME/.pyenv" ]; then
+	export PYENV_ROOT="$HOME/.pyenv"
+
+	if [ -d "$PYENV_ROOT/bin" ]; then
+		PATH="$PYENV_ROOT/bin:$PATH"
+	fi
+fi
+
+# https://stackoverflow.com/a/677212/2384183
+if command -v pyenv > /dev/null 2>&1; then
+	eval "$(pyenv init -)"
+fi
+
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
 
