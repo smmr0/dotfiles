@@ -1,9 +1,5 @@
 #!/usr/bin/env sh
 
-tmux_sess_name_from_sess_id() {
-	tmux ls -F '#{session_id} #{session_name}' 2> /dev/null | awk -v "sess_id=$1" '$1 == sess_id { $1 = ""; print substr($0,2) }'
-}
-
 if [ -f '/etc/profile' ]; then
 	. '/etc/profile'
 fi
@@ -11,14 +7,14 @@ fi
 if [ "$PWD" = "$HOME" ]; then
 	last_tmux_sess_id="$(tmux ls -F '#{session_activity} #{session_attached} #{session_id}' 2> /dev/null | sort -nr | awk '$2 == "0" { print $3 }' | head -1)"
 	if [ -n "$last_tmux_sess_id" ]; then
-		tmux a -t "$(tmux_sess_name_from_sess_id "$last_tmux_sess_id")"
+		tmux a -t "$last_tmux_sess_id"
 	else
 		tmux
 	fi
 else
 	last_tmux_sess_id="$(tmux ls -F '#{session_activity} #{session_attached} #{session_id} #{pane_current_path}' 2> /dev/null | sort -nr | awk -v "pwd=$PWD" '{ attached = $2; sess = $3; $1 = ""; $2 = ""; $3 = ""; if (attached == "0" && substr($0,4) == pwd) { print sess } }' | head -1)"
 	if [ -n "$last_tmux_sess_id" ]; then
-		tmux a -t "$(tmux_sess_name_from_sess_id "$last_tmux_sess_id")"
+		tmux a -t "$last_tmux_sess_id"
 	else
 		tmux
 	fi
