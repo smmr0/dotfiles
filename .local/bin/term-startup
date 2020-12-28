@@ -12,7 +12,7 @@ if [ "$PWD" = "$HOME" ]; then
 		tmux
 	fi
 else
-	last_tmux_sess="$(tmux ls -F '#{session_activity} #{session_attached} #{pane_current_path} #{session_name}' 2> /dev/null | sort -nr | awk -v "pwd=$PWD" '$2 == "0" && $3 == pwd { print $4 }' | head -1)"
+	last_tmux_sess="$(tmux ls -F '#{session_activity} #{session_attached} #{session_name} #{pane_current_path}' 2> /dev/null | sort -nr | awk -v "pwd=$PWD" '{ attached = $2; sess = $3; $1 = ""; $2 = ""; $3 = ""; if (attached == "0" && substr($0,4) == pwd) { print sess } }' | head -1)"
 	if [ -n "$last_tmux_sess" ]; then
 		tmux a -t "$last_tmux_sess"
 	else
