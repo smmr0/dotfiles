@@ -1,6 +1,20 @@
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 IRB.conf[:SAVE_HISTORY] = 1000
 
+module Kernel
+  alias_method :old_p, :p
+  def p(*args, **opts)
+    old_p(*args, **opts)
+    nil
+  end
+
+  alias_method :old_pp, :pp
+  def pp(*args, **opts)
+    old_pp(*args, **opts)
+    nil
+  end
+end
+
 if ENV['RM_INFO'] # RubyMine
   ENV['EDITOR'] = 'rubymine'
 end
