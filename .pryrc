@@ -14,6 +14,8 @@ if ENV['RM_INFO']
   def Readline.vi_editing_mode?
     false
   end
+
+  Pry.config.correct_indent = false
 end
 
 Pry.config.color =
