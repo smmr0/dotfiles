@@ -1,3 +1,5 @@
+require 'readline'
+
 class Pry
   class Command
     class Huh < Wtf
@@ -5,6 +7,12 @@ class Pry
       options listing: 'huh?'
       banner Wtf.banner.gsub('wtf', 'huh')
     end
+  end
+end
+
+if ENV['RM_INFO']
+  def Readline.vi_editing_mode?
+    false
   end
 end
 
