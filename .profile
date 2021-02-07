@@ -26,6 +26,10 @@ fi
 # https://stackoverflow.com/a/677212/2384183
 if command -v pyenv > /dev/null 2>&1; then
 	eval "$(pyenv init -)"
+
+	if [ -d "$PYENV_ROOT/plugins/pyenv-virtualenv" ]; then
+		eval "$(pyenv virtualenv-init -)"
+	fi
 fi
 
 if [ -d "$HOME/.nvm" ]; then
