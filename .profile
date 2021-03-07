@@ -32,6 +32,10 @@ if command -v pyenv > /dev/null 2>&1; then
 	fi
 fi
 
+if [ -d "$HOME/.yarn/bin" ]; then
+	PATH="$HOME/.yarn/bin:$PATH"
+fi
+
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
 
