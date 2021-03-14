@@ -10,6 +10,7 @@ set ignorecase
 set smartcase
 set incsearch
 set hlsearch
+set scrolloff=8
 command W w
 command Q q
 command WQ wq
