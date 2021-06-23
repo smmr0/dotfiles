@@ -11,6 +11,7 @@ set smartcase
 set incsearch
 set hlsearch
 set scrolloff=8
+set mouse=a
 command W w
 command Q q
 command WQ wq
