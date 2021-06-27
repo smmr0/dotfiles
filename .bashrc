@@ -156,3 +156,7 @@ if ! shopt -oq posix; then
 		source <(doctl completion bash)
 	fi
 fi
+
+if command -v pyenv > /dev/null 2>&1; then
+	eval "$(pyenv init -)"
+fi
