@@ -15,6 +15,19 @@ if command -v rbenv > /dev/null 2>&1; then
 	eval "$(rbenv init -)"
 fi
 
+if [ -d "$HOME/.nodenv/bin" ]; then
+	PATH="$HOME/.nodenv/bin:$PATH"
+fi
+
+if [ -d "$HOME/.nodenv/plugins/node-build/bin" ]; then
+	PATH="$HOME/.nodenv/plugins/node-build/bin:$PATH"
+fi
+
+# https://stackoverflow.com/a/677212/2384183
+if command -v nodenv > /dev/null 2>&1; then
+	eval "$(nodenv init -)"
+fi
+
 if [ -d "$HOME/.pyenv" ]; then
 	export PYENV_ROOT="$HOME/.pyenv"
 
