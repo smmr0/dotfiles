@@ -45,6 +45,24 @@ if command -v pyenv > /dev/null 2>&1; then
 	fi
 fi
 
+if [ -d "$HOME/.erlenv/bin" ]; then
+	PATH="$HOME/.erlenv/bin:$PATH"
+fi
+
+# https://stackoverflow.com/a/677212/2384183
+if command -v erlenv > /dev/null 2>&1; then
+	eval "$(erlenv init -)"
+fi
+
+if [ -d "$HOME/.exenv/bin" ]; then
+	PATH="$HOME/.exenv/bin:$PATH"
+fi
+
+# https://stackoverflow.com/a/677212/2384183
+if command -v exenv > /dev/null 2>&1; then
+	eval "$(exenv init -)"
+fi
+
 if [ -d "$HOME/.yarn/bin" ]; then
 	PATH="$HOME/.yarn/bin:$PATH"
 fi
