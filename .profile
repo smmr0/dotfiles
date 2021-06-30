@@ -103,6 +103,12 @@ if [ -n "$XDG_DATA_DIRS" ]; then
 	export XDG_DATA_DIRS="$(pathmerge "$XDG_DATA_DIRS")"
 fi
 
+if [ -n "$RUBYOPT" ]; then
+	export RUBYOPT="$RUBYOPT -r$HOME/.local/share/ruby/requires/numeric"
+else
+	export RUBYOPT="-r$HOME/.local/share/ruby/requires/numeric"
+fi
+
 if [ -n "$BASH_VERSION" ]; then
 	if [ -f "$HOME/.bashrc" ]; then
 		. "$HOME/.bashrc"
