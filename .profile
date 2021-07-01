@@ -63,6 +63,15 @@ if command -v exenv > /dev/null 2>&1; then
 	eval "$(exenv init -)"
 fi
 
+if [ -d "$HOME/.jenv/bin" ]; then
+	PATH="$HOME/.jenv/bin:$PATH"
+fi
+
+# https://stackoverflow.com/a/677212/2384183
+if command -v jenv > /dev/null 2>&1; then
+	eval "$(jenv init -)"
+fi
+
 if [ -d "$HOME/.yarn/bin" ]; then
 	PATH="$HOME/.yarn/bin:$PATH"
 fi
