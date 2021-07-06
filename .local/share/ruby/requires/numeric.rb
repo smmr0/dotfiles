@@ -17,9 +17,14 @@ end
 class Float
   alias old_inspect inspect
   def inspect(*args, **opts)
-    old_inspect(*args, **opts).sub(
-      Regexp.new("\\A#{Regexp.escape(to_i.to_s)}(?=\\.|\\z)"),
-      to_i.inspect
-    )
+    case self
+    when INFINITY
+      old_inspect(*args, **opts)
+    else
+      old_inspect(*args, **opts).sub(
+        Regexp.new("\\A#{Regexp.escape(to_i.to_s)}(?=\\.|\\z)"),
+        to_i.inspect
+      )
+    end
   end
 end
