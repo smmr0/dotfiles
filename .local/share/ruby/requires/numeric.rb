@@ -2,8 +2,8 @@ class Integer
   alias old_inspect inspect
   def inspect(*args, **opts)
     if respond_to?(:digits) || args.empty? || opts.empty?
-      groups = digits(1000).reverse
-      padded_groups = [groups.first.to_s]
+      groups = abs.digits(1000).reverse
+      padded_groups = [(positive? ? groups.first : groups.first * -1).to_s]
       groups.drop(1).each do |group|
         padded_groups << group.to_s.rjust(3, '0')
       end
