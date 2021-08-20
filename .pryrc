@@ -16,6 +16,7 @@ if ENV['RM_INFO']
   end
 
   Pry.config.correct_indent = false
+  Pry.config.pager = false
 end
 
 Pry.config.color =
