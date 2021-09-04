@@ -1,0 +1,57 @@
+#!/bin/sh
+
+set -euf
+
+try_pull_git_repo() {
+	repo_dir="$1"
+
+	echo "$repo_dir"
+
+	if git -C "$repo_dir" rev-parse > /dev/null 2>&1; then
+		git -C "$repo_dir" pull 2> /dev/null || true
+	fi
+
+	echo
+}
+
+pull_rbenv_ish() {
+	command="$1"
+
+	if command -v "$command" > /dev/null 2>&1; then
+		try_pull_git_repo "$("$command" root)"
+
+		if [ -d "$("$command" root)/plugins" ]; then
+			for plugin in $(ls "$("$command" root)/plugins"); do
+				try_pull_git_repo "$("$command" root)/plugins/$plugin"
+			done
+		fi
+	fi
+}
+
+if [ "$(whoami)" = 'root' ]; then
+	if command -v apt > /dev/null 2>&1; then
+		apt update && apt dist-upgrade -y && apt autoremove -y
+		echo
+	fi
+
+	if command -v snap > /dev/null 2>&1; then
+		snap refresh
+		echo
+	fi
+else
+	sudo "$(realpath "$0")" "$@" # Re-run script with sudo
+
+	for possible_repo in $(ls "$HOME/.local/src"); do
+		try_pull_git_repo "$HOME/.local/src/$possible_repo"
+	done
+
+	"$HOME/.local/src/dotfiles/setup.sh"
+	echo
+
+	pull_rbenv_ish rbenv
+	pull_rbenv_ish nodenv
+	pull_rbenv_ish pyenv
+	pull_rbenv_ish erlenv
+	pull_rbenv_ish exenv
+	pull_rbenv_ish jenv
+fi
