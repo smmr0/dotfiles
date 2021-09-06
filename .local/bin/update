@@ -28,7 +28,7 @@ pull_rbenv_ish() {
 	fi
 }
 
-if [ "$(whoami)" = 'root' ]; then
+if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 	if command -v apt > /dev/null 2>&1; then
 		apt update && apt dist-upgrade -y && apt autoremove -y
 		echo
@@ -38,8 +38,12 @@ if [ "$(whoami)" = 'root' ]; then
 		snap refresh
 		echo
 	fi
-else
-	sudo "$(realpath "$0")" "$@" # Re-run script with sudo
+fi
+
+if [ "$(whoami)" != 'root' ]; then
+	if command -v sudo > /dev/null 2>&1; then
+		sudo "$(realpath "$0")" "$@" # Re-run script with sudo
+	fi
 
 	for possible_repo in $(ls "$HOME/.local/src"); do
 		try_pull_git_repo "$HOME/.local/src/$possible_repo"
