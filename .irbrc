@@ -1,19 +1,21 @@
+require 'pp'
+
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 IRB.conf[:SAVE_HISTORY] = 1000
 
-module Kernel
-  alias_method :old_p, :p
-  def p(*args, **opts)
-    old_p(*args, **opts)
+module PrintStatementsReturnNil
+  def p(*_objs)
+    super
     nil
   end
 
-  alias_method :old_pp, :pp
-  def pp(*args, **opts)
-    old_pp(*args, **opts)
+  def pp(*_objs)
+    super
     nil
   end
 end
+Kernel.prepend PrintStatementsReturnNil
+Object.prepend PrintStatementsReturnNil
 
 if ENV['RM_INFO'] # RubyMine
   ENV['EDITOR'] = 'rubymine'
