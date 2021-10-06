@@ -28,6 +28,16 @@ pull_rbenv_ish() {
 	fi
 }
 
+try_upgrade_pip_package() {
+	package="$1"
+
+	if command -v pip > /dev/null 2>&1; then
+		if pip list 2> /dev/null | tail -n +3 | awk -v "package=$package" 'BEGIN { rc = 1 } $1 = $package { rc = 0; exit } END { exit rc }'; then
+			pip install --upgrade "$package"
+		fi
+	fi
+}
+
 if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 	if command -v apt > /dev/null 2>&1; then
 		apt update && apt dist-upgrade -y && apt autoremove -y
@@ -58,4 +68,7 @@ if [ "$(whoami)" != 'root' ]; then
 	pull_rbenv_ish erlenv
 	pull_rbenv_ish exenv
 	pull_rbenv_ish jenv
+
+	try_upgrade_pip_package awscli
+	try_upgrade_pip_package awsebcli
 fi
