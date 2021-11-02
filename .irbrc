@@ -17,6 +17,16 @@ end
 Kernel.prepend PrintStatementsReturnNil
 Object.prepend PrintStatementsReturnNil
 
+if Object.const_defined?(:Money)
+  module MoneyInspectWithFormat
+    def inspect
+      format
+    end
+  end
+
+  Money.prepend MoneyInspectWithFormat
+end
+
 if ENV['RM_INFO'] # RubyMine
   ENV['EDITOR'] = 'rubymine'
 end
