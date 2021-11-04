@@ -63,6 +63,16 @@ if [ "$(whoami)" != 'root' ]; then
 	echo
 
 	pull_rbenv_ish rbenv
+	if command -v rbenv > /dev/null 2>&1; then
+		for ruby_version in $(rbenv versions --bare); do
+			if RBENV_VERSION="$ruby_version" ruby -e "exit Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') ? 0 : 1"; then
+				echo "Updating RubyGems for Ruby $ruby_version…"
+				RBENV_VERSION="$ruby_version" gem update --system
+				echo
+			fi
+		done
+	fi
+
 	pull_rbenv_ish nodenv
 	pull_rbenv_ish pyenv
 	pull_rbenv_ish erlenv
