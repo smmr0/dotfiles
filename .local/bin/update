@@ -69,6 +69,10 @@ if [ "$(whoami)" != 'root' ]; then
 				echo "Updating RubyGems for Ruby $ruby_version…"
 				RBENV_VERSION="$ruby_version" gem update --system
 				echo
+
+				echo "Updating Pry for Ruby $ruby_version…"
+				RBENV_VERSION="$ruby_version" gem update pry pry-rails pry-doc
+				echo
 			fi
 		done
 	fi
