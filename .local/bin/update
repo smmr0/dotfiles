@@ -33,7 +33,7 @@ try_upgrade_pip_package() {
 
 	if command -v pip > /dev/null 2>&1; then
 		if pip list 2> /dev/null | tail -n +3 | awk -v "package=$package" 'BEGIN { rc = 1 } $1 == $package { rc = 0; exit } END { exit rc }'; then
-			pip install --upgrade "$package"
+			pip install --upgrade "$package" "$@"
 		fi
 	fi
 }
@@ -83,6 +83,6 @@ if [ "$(whoami)" != 'root' ]; then
 	pull_rbenv_ish exenv
 	pull_rbenv_ish jenv
 
-	try_upgrade_pip_package awscli
-	try_upgrade_pip_package awsebcli
+	try_upgrade_pip_package awscli --user
+	try_upgrade_pip_package awsebcli --user
 fi
