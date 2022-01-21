@@ -67,6 +67,7 @@ if [ "$(whoami)" != 'root' ]; then
 		for ruby_version in $(rbenv versions --bare); do
 			if RBENV_VERSION="$ruby_version" ruby -e "exit Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') ? 0 : 1"; then
 				echo "Updating RubyGems for Ruby $ruby_version…"
+				RBENV_VERSION="$ruby_version" gem install rubygems-update
 				RBENV_VERSION="$ruby_version" gem update --system
 				echo
 
