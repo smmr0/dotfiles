@@ -48,6 +48,11 @@ if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 		snap refresh
 		echo
 	fi
+
+	if command -v flatpak > /dev/null 2>&1; then
+		flatpak update
+		echo
+	fi
 fi
 
 if [ "$(whoami)" != 'root' ]; then
