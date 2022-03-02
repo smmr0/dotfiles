@@ -91,6 +91,7 @@ if [ "$(whoami)" != 'root' ]; then
 
 	if command -v pyenv > /dev/null 2>&1; then
 		for python_version in $(pyenv versions --bare); do
+			PYENV_VERSION="$python_version" try_upgrade_pip_package pip
 			PYENV_VERSION="$python_version" try_upgrade_pip_package awscli --user
 			PYENV_VERSION="$python_version" try_upgrade_pip_package awsebcli --user
 		done
