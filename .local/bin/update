@@ -33,7 +33,7 @@ try_upgrade_pip_package() {
 
 	if command -v pip > /dev/null 2>&1; then
 		if pip list 2> /dev/null | tail -n +3 | awk -v "package=$package" 'BEGIN { rc = 1 } $1 == package { rc = 0; exit } END { exit rc }'; then
-			pip install --upgrade "$package" "$@"
+			pip install --upgrade --upgrade-strategy eager "$package" "$@"
 		fi
 	fi
 }
