@@ -6,6 +6,7 @@
 	editor = vim
 	hooksPath = ~/.config/git/hooks
 	excludesfile = ~/.gitignore_global
+	autocrlf = input
 [init]
 	defaultBranch = main
 [push]
