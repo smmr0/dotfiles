@@ -113,9 +113,9 @@ if [ -n "$XDG_DATA_DIRS" ]; then
 fi
 
 if [ -n "$LESS" ]; then
-	export LESS="${LESS}iNR"
+	export LESS="${LESS}iR"
 else
-	export LESS='iNR'
+	export LESS='iR'
 fi
 
 if [ -n "$RUBYOPT" ]; then
