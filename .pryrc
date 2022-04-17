@@ -51,10 +51,10 @@ Pry::Prompt.add(
 ) do |context, nesting, pry_instance, sep|
   <<-PROMPT.gsub(/(\A|\n)\s*/, '')
     \033[1;97;#{case sep; when '>' then '45'; when '*' then '43'; end}m#{pry_instance.config.prompt_name}
-    \033[21;#{case sep; when '>' then '35'; when '*' then '33'; end};44m
+    \033[21;24;#{case sep; when '>' then '35'; when '*' then '33'; end};44m
     \033[1;97m#{context}
-    #{"\033[21;34;42m\033[1;97m#{nesting}" unless nesting.zero?}
-    \033[21;#{nesting.zero? ? '34' : '32'};49m
+    #{"\033[21;24;34;42m\033[1;97m#{nesting}" unless nesting.zero?}
+    \033[21;24;#{nesting.zero? ? '34' : '32'};49m
     \033[0m
   PROMPT
 end
@@ -101,12 +101,12 @@ Pry::Prompt.add(
 
   <<-PROMPT.gsub(/(\A|\n)\s*/, '')
     \033[1;97;#{case sep; when '>' then '45'; when '*' then '43'; end}m#{project_name}
-    \033[21;#{case sep; when '>' then '35'; when '*' then '33'; end};#{Rails.env.production? ? '41' : '46'}m
+    \033[21;24;#{case sep; when '>' then '35'; when '*' then '33'; end};#{Rails.env.production? ? '41' : '46'}m
     \033[1;97m#{Rails.env}
-    \033[21;#{Rails.env.production? ? '31' : '36'};44m
+    \033[21;24;#{Rails.env.production? ? '31' : '36'};44m
     \033[1;97m#{context}
-    #{"\033[21;34;42m\033[1;97m#{nesting}" unless nesting.zero?}
-    \033[21;#{nesting.zero? ? '34' : '32'};49m
+    #{"\033[21;24;34;42m\033[1;97m#{nesting}" unless nesting.zero?}
+    \033[21;24;#{nesting.zero? ? '34' : '32'};49m
     \033[0m
   PROMPT
 end
