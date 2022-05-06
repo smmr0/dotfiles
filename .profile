@@ -93,6 +93,10 @@ if [ -d "$HOME/go" ]; then
 	PATH="$GOPATH/bin:$PATH"
 fi
 
+if [ -d "$HOME/.linuxbrew" ]; then
+	eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
+fi
+
 if [ -d "$HOME/.local/bin" ]; then
 	PATH="$HOME/.local/bin:$PATH"
 fi
