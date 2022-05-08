@@ -60,7 +60,7 @@ if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 	fi
 
 	if command -v flatpak > /dev/null 2>&1; then
-		flatpak update
+		flatpak update -y
 		echo
 	fi
 fi
