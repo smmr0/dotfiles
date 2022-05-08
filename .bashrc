@@ -134,6 +134,10 @@ fi
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
+	if [ -f "$PREFIX/usr/share/bash-completion/bash_completion" ]; then
+		. "$PREFIX/usr/share/bash-completion/bash_completion"
+	fi
+
 	if [ -f "$PREFIX/etc/bash_completion" ]; then
 		. "$PREFIX/etc/bash_completion"
 	fi
