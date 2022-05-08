@@ -84,15 +84,6 @@ if [ -d "$HOME/.nvm" ]; then
 	fi
 fi
 
-if [ -d '/usr/local/go' ]; then
-	PATH="$GOROOT/bin:$PATH"
-fi
-
-if [ -d "$HOME/go" ]; then
-	export GOPATH="$HOME/go"
-	PATH="$GOPATH/bin:$PATH"
-fi
-
 if [ -d "$HOME/.linuxbrew" ]; then
 	eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
 fi
