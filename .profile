@@ -29,22 +29,9 @@ if [ -f "$HOME/.env" ]; then
 	. "$HOME/.env"
 fi
 
-configure_rbenv_ish "$HOME/.rbenv" rbenv
-configure_rbenv_ish "$HOME/.nodenv" nodenv
-configure_rbenv_ish "$HOME/.erlenv" erlenv
-configure_rbenv_ish "$HOME/.exenv" exenv
-configure_rbenv_ish "$HOME/.jenv" jenv
-
-configure_rbenv_ish "$HOME/.pyenv"
-if command -v pyenv > /dev/null 2>&1; then
-	eval "$(pyenv init --path)"
-
-	if [ -d "$PYENV_ROOT/plugins/pyenv-virtualenv" ]; then
-		eval "$(pyenv virtualenv-init -)"
-	fi
+if [ -d "$HOME/.linuxbrew" ]; then
+	eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
 fi
-
-add_to_path "$HOME/.yarn/bin"
 
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
@@ -54,9 +41,21 @@ if [ -d "$HOME/.nvm" ]; then
 	fi
 fi
 
-if [ -d "$HOME/.linuxbrew" ]; then
-	eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
+configure_rbenv_ish "$HOME/.erlenv" erlenv
+configure_rbenv_ish "$HOME/.exenv" exenv
+configure_rbenv_ish "$HOME/.jenv" jenv
+configure_rbenv_ish "$HOME/.pyenv"
+if command -v pyenv > /dev/null 2>&1; then
+	eval "$(pyenv init --path)"
+
+	if [ -d "$PYENV_ROOT/plugins/pyenv-virtualenv" ]; then
+		eval "$(pyenv virtualenv-init -)"
+	fi
 fi
+configure_rbenv_ish "$HOME/.nodenv" nodenv
+configure_rbenv_ish "$HOME/.rbenv" rbenv
+
+add_to_path "$HOME/.yarn/bin"
 
 add_to_path "$HOME/.local/bin"
 add_to_path "$HOME/bin"
