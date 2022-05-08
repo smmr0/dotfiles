@@ -1,42 +1,41 @@
+add_to_path() {
+	new_path="$1"
+
+	if [ -d "$new_path" ]; then
+		PATH="$new_path:$PATH"
+	fi
+}
+
+configure_rbenv_ish() {
+	dir="$1"
+	command="$2"
+
+	add_to_path "$dir/bin"
+
+	if [ -d "$dir/plugins" ]; then
+		for plugin_dir in "$dir/plugins"; do
+			add_to_path "$plugin_dir/bin"
+		done
+	fi
+
+	if [ -n "$command" ]; then
+		if command -v "$command" > /dev/null 2>&1; then
+			eval "$("$command" init -)"
+		fi
+	fi
+}
+
 if [ -f "$HOME/.env" ]; then
 	. "$HOME/.env"
 fi
 
-if [ -d "$HOME/.rbenv/bin" ]; then
-	PATH="$HOME/.rbenv/bin:$PATH"
-fi
+configure_rbenv_ish "$HOME/.rbenv" rbenv
+configure_rbenv_ish "$HOME/.nodenv" nodenv
+configure_rbenv_ish "$HOME/.erlenv" erlenv
+configure_rbenv_ish "$HOME/.exenv" exenv
+configure_rbenv_ish "$HOME/.jenv" jenv
 
-if [ -d "$HOME/.rbenv/plugins/ruby-build/bin" ]; then
-	PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
-fi
-
-# https://stackoverflow.com/a/677212/2384183
-if command -v rbenv > /dev/null 2>&1; then
-	eval "$(rbenv init -)"
-fi
-
-if [ -d "$HOME/.nodenv/bin" ]; then
-	PATH="$HOME/.nodenv/bin:$PATH"
-fi
-
-if [ -d "$HOME/.nodenv/plugins/node-build/bin" ]; then
-	PATH="$HOME/.nodenv/plugins/node-build/bin:$PATH"
-fi
-
-# https://stackoverflow.com/a/677212/2384183
-if command -v nodenv > /dev/null 2>&1; then
-	eval "$(nodenv init -)"
-fi
-
-if [ -d "$HOME/.pyenv" ]; then
-	export PYENV_ROOT="$HOME/.pyenv"
-
-	if [ -d "$PYENV_ROOT/bin" ]; then
-		PATH="$PYENV_ROOT/bin:$PATH"
-	fi
-fi
-
-# https://stackoverflow.com/a/677212/2384183
+configure_rbenv_ish "$HOME/.pyenv"
 if command -v pyenv > /dev/null 2>&1; then
 	eval "$(pyenv init --path)"
 
@@ -45,36 +44,7 @@ if command -v pyenv > /dev/null 2>&1; then
 	fi
 fi
 
-if [ -d "$HOME/.erlenv/bin" ]; then
-	PATH="$HOME/.erlenv/bin:$PATH"
-fi
-
-# https://stackoverflow.com/a/677212/2384183
-if command -v erlenv > /dev/null 2>&1; then
-	eval "$(erlenv init -)"
-fi
-
-if [ -d "$HOME/.exenv/bin" ]; then
-	PATH="$HOME/.exenv/bin:$PATH"
-fi
-
-# https://stackoverflow.com/a/677212/2384183
-if command -v exenv > /dev/null 2>&1; then
-	eval "$(exenv init -)"
-fi
-
-if [ -d "$HOME/.jenv/bin" ]; then
-	PATH="$HOME/.jenv/bin:$PATH"
-fi
-
-# https://stackoverflow.com/a/677212/2384183
-if command -v jenv > /dev/null 2>&1; then
-	eval "$(jenv init -)"
-fi
-
-if [ -d "$HOME/.yarn/bin" ]; then
-	PATH="$HOME/.yarn/bin:$PATH"
-fi
+add_to_path "$HOME/.yarn/bin"
 
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
@@ -88,13 +58,8 @@ if [ -d "$HOME/.linuxbrew" ]; then
 	eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
 fi
 
-if [ -d "$HOME/.local/bin" ]; then
-	PATH="$HOME/.local/bin:$PATH"
-fi
-
-if [ -d "$HOME/bin" ] ; then
-	PATH="$HOME/bin:$PATH"
-fi
+add_to_path "$HOME/.local/bin"
+add_to_path "$HOME/bin"
 
 # http://membled.com/work/apps/pathmerge/
 export PATH="$(pathmerge "$PATH")"
