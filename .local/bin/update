@@ -70,6 +70,11 @@ if [ "$(whoami)" != 'root' ]; then
 		sudo "$(realpath "$0")" "$@" # Re-run script with sudo
 	fi
 
+	if command -v brew > /dev/null 2>&1; then
+		brew upgrade
+		echo
+	fi
+
 	for possible_repo in $(ls "$HOME/.local/src"); do
 		try_pull_git_repo "$HOME/.local/src/$possible_repo"
 	done
