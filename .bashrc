@@ -156,8 +156,7 @@ if ! shopt -oq posix; then
 			source "$(brew --prefix)/etc/profile.d/bash_completion.sh"
 		else
 			for completion in "$(brew --prefix)/etc/bash_completion.d/"*; do
-				[[ -r "$completion" ]] && source
-				"$completion"
+				[[ -r "$completion" ]] && source "$completion"
 			done
 		fi
 	fi
