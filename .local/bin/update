@@ -102,7 +102,8 @@ if [ "$(whoami)" != 'root' ]; then
 	if command -v nodenv > /dev/null 2>&1; then
 		for node_version in $(nodenv versions --bare); do
 			echo "Updating NPM/Yarn for Node $node_version…"
-			NODENV_VERSION="$node_version" npm update --global npm yarn
+			NODENV_VERSION="$node_version" npm update --global npm@latest
+			NODENV_VERSION="$node_version" npm update --global yarn@latest
 			echo
 		done
 	fi
