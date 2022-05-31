@@ -85,26 +85,34 @@ if [ "$(whoami)" != 'root' ]; then
 	pull_rbenv_ish rbenv
 	if command -v rbenv > /dev/null 2>&1; then
 		for ruby_version in $(rbenv versions --bare); do
-			if RBENV_VERSION="$ruby_version" ruby -e "exit Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') ? 0 : 1"; then
-				echo "Updating RubyGems for Ruby $ruby_version…"
-				RBENV_VERSION="$ruby_version" gem install rubygems-update bundler
-				RBENV_VERSION="$ruby_version" gem update --system
-				echo
+			(
+				export RBENV_VERSION="$ruby_version"
 
-				echo "Updating Pry for Ruby $ruby_version…"
-				RBENV_VERSION="$ruby_version" gem update pry pry-rails pry-doc
-				echo
-			fi
+				if ruby -e "exit Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') ? 0 : 1"; then
+					echo "Updating RubyGems for Ruby $(rbenv version-name)…"
+					gem install rubygems-update bundler
+					gem update --system
+					echo
+
+					echo "Updating Pry for Ruby $(rbenv version-name)…"
+					gem update pry pry-rails pry-doc
+					echo
+				fi
+			)
 		done
 	fi
 
 	pull_rbenv_ish nodenv
 	if command -v nodenv > /dev/null 2>&1; then
 		for node_version in $(nodenv versions --bare); do
-			echo "Updating NPM/Yarn for Node $node_version…"
-			NODENV_VERSION="$node_version" npm update --global npm@latest
-			NODENV_VERSION="$node_version" npm update --global yarn@latest
-			echo
+			(
+				export NODENV_VERSION="$node_version"
+
+				echo "Updating NPM/Yarn for Node $(nodenv version-name)…"
+				npm update --global npm@latest
+				npm update --global yarn@latest
+				echo
+			)
 		done
 	fi
 
@@ -115,7 +123,11 @@ if [ "$(whoami)" != 'root' ]; then
 
 	if command -v pyenv > /dev/null 2>&1; then
 		for python_version in $(pyenv versions --bare); do
-			PYENV_VERSION="$python_version" try_upgrade_pip_package pip
+			(
+				export PYENV_VERSION="$python_version"
+
+				try_upgrade_pip_package pip
+			)
 		done
 	fi
 fi
