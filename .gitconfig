@@ -1,7 +1,6 @@
 [user]
-	name = Jer Megel
-	email = git@jer.dev
-	signingkey = 0x910FB4D15EC801AB
+	name = Summer ☀️
+	email = git@summerm.dev
 [core]
 	editor = vim
 	hooksPath = ~/.config/git/hooks
