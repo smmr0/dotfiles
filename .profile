@@ -58,10 +58,9 @@ fi
 configure_rbenv_ish "$HOME/.nodenv" nodenv
 configure_rbenv_ish "$HOME/.rbenv" rbenv
 
-if command -v brew > /dev/null 2>&1; then
-	if [ -s "$(brew --prefix asdf)/libexec/asdf.sh" ]; then
-		. "$(brew --prefix asdf)/libexec/asdf.sh"
-	fi
+add_to_path "$HOME/.asdf/bin"
+if which asdf > /dev/null 2>&1; then
+	. "$(realpath "$(dirname "$(realpath "$(which asdf)")")/../asdf.sh")"
 fi
 
 add_to_path "$HOME/.yarn/bin"
