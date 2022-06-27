@@ -154,11 +154,11 @@ if ! shopt -oq posix; then
 	if command -v brew &>/dev/null 2>&1; then
 		if [[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]]; then
 			source "$(brew --prefix)/etc/profile.d/bash_completion.sh"
-		else
-			for completion in "$(brew --prefix)/etc/bash_completion.d/"*; do
-				[[ -r "$completion" ]] && source "$completion"
-			done
 		fi
+
+		for completion in "$(brew --prefix)/etc/bash_completion.d/"*; do
+			[[ -r "$completion" ]] && source "$completion"
+		done
 	fi
 
 

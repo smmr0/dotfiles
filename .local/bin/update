@@ -28,6 +28,30 @@ pull_rbenv_ish() {
 	fi
 }
 
+upgrade_ruby() {
+	if ruby -e "exit Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') ? 0 : 1"; then
+		ruby_version="$(ruby -e 'puts RUBY_VERSION')"
+
+		echo "Updating RubyGems for Ruby $ruby_version…"
+		gem install rubygems-update bundler
+		gem update --system
+		echo
+
+		echo "Updating Pry for Ruby $ruby_version…"
+		gem update pry pry-rails pry-doc
+		echo
+	fi
+}
+
+upgrade_node() {
+	node_version="$(node --version)"
+
+	echo "Updating NPM/Yarn for Node $node_version…"
+	npm update --global npm@latest
+	npm update --global yarn@latest
+	echo
+}
+
 pip_package_exists() {
 	package="$1"
 
@@ -82,22 +106,50 @@ if [ "$(whoami)" != 'root' ]; then
 	"$HOME/.local/src/dotfiles/setup.sh"
 	echo
 
+	if command -v asdf > /dev/null 2>&1; then
+		for plugin in $(asdf plugin list); do
+			echo "Upgrading $plugin…"
+
+			if [ "$plugin" = 'java' ] && asdf list "$plugin" | grep -q '^\s*openjdk-'; then
+				asdf install "$plugin" "$(asdf latest java openjdk)"
+			else
+				asdf install "$plugin" latest
+			fi
+
+			if [ "$plugin" = 'python' ]; then
+				asdf global "$plugin" latest 2.7.18
+			elif [ "$plugin" = 'java' ] && asdf list "$plugin" | grep -q '^\s*openjdk-'; then
+				asdf global "$plugin" "$(asdf latest java openjdk)"
+			else
+				asdf global "$plugin" latest
+			fi
+
+			echo
+
+			if [ "$plugin" = 'ruby' ]; then
+				for version in $(asdf list "$plugin"); do
+					(
+						export ASDF_RUBY_VERSION="$version"
+						upgrade_ruby
+					)
+				done
+			elif [ "$plugin" = 'nodejs' ]; then
+				for version in $(asdf list "$plugin"); do
+					(
+						export ASDF_NODEJS_VERSION="$version"
+						upgrade_node
+					)
+				done
+			fi
+		done
+	fi
+
 	pull_rbenv_ish rbenv
 	if command -v rbenv > /dev/null 2>&1; then
 		for ruby_version in $(rbenv versions --bare); do
 			(
 				export RBENV_VERSION="$ruby_version"
-
-				if ruby -e "exit Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') ? 0 : 1"; then
-					echo "Updating RubyGems for Ruby $(rbenv version-name)…"
-					gem install rubygems-update bundler
-					gem update --system
-					echo
-
-					echo "Updating Pry for Ruby $(rbenv version-name)…"
-					gem update pry pry-rails pry-doc
-					echo
-				fi
+				upgrade_ruby
 			)
 		done
 	fi
@@ -107,11 +159,7 @@ if [ "$(whoami)" != 'root' ]; then
 		for node_version in $(nodenv versions --bare); do
 			(
 				export NODENV_VERSION="$node_version"
-
-				echo "Updating NPM/Yarn for Node $(nodenv version-name)…"
-				npm update --global npm@latest
-				npm update --global yarn@latest
-				echo
+				upgrade_node
 			)
 		done
 	fi
