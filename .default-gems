@@ -1,3 +1,5 @@
+rubygems-update
+bundler
 pry
 pry-doc
 pry-rails
