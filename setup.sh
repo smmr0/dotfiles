@@ -24,11 +24,15 @@ for f in $(find "$dir" \( -path "$dir/.git" -o -name '.*.swp' -o -path "$dir/set
 	if [ -s "$dest" ]; then
 		resp=
 		until [ "$resp" = 'y' -o "$resp" = 'n' ]; do
-			echo -n "Do you want to replace ~/$relative_path (backed up as *.bak)? (y/n/d/q) "
+			echo -n "Do you want to replace ~/$relative_path? (y/n/d/q) "
 			read resp
 			resp=$(echo -n "${resp:0:1}" | tr '[:upper:]' '[:lower:]')
 			if [ "$resp" = 'y' ]; then
-				mv "$dest" "$dest.bak"
+				if command -v trash > /dev/null 2>&1; then
+					trash "$dest"
+				else
+					mv "$dest" "$dest.bak"
+				fi
 			elif [ "$resp" = 'd' ]; then
 				diff "$dest" "$f" || true
 			elif [ "$resp" = 'q' ]; then
