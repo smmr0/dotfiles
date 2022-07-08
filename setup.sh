@@ -8,7 +8,7 @@ dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Loop through every file in source directory and sub directories except .git
 # subdirectory and this script
 IFS=$'\n' 
-for f in $(find "$dir" \( -path "$dir/.git" -o -path "$dir/setup.sh" \) -prune -o -type f -print | sort); do
+for f in $(find "$dir" \( -path "$dir/.git" -o -name '.*.swp' -o -path "$dir/setup.sh" \) -prune -o -type f -print | sort); do
 	relative_path=$(realpath --relative-to="$dir" "$f")
 	container=$(dirname "$relative_path")
 	dest="$HOME/$relative_path"
