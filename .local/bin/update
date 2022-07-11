@@ -88,6 +88,10 @@ if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 		flatpak uninstall --unused
 		echo
 	fi
+
+	for possible_repo in $(ls /usr/local/src); do
+		try_pull_git_repo "/usr/local/src/$possible_repo"
+	done
 fi
 
 if [ "$(whoami)" != 'root' ]; then
