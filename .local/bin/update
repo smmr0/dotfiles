@@ -111,6 +111,8 @@ if [ "$(whoami)" != 'root' ]; then
 		for plugin in $(asdf plugin list); do
 			echo "Upgrading $plugin…"
 
+			asdf plugin update "$plugin"
+
 			if [ "$plugin" = 'java' ] && asdf list "$plugin" | grep -q '^\s*openjdk-'; then
 				asdf install "$plugin" "$(asdf latest java openjdk)"
 			else
