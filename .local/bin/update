@@ -165,10 +165,6 @@ if [ "$(whoami)" != 'root' ]; then
 	fi
 
 	pull_rbenv_ish pyenv
-	pull_rbenv_ish erlenv
-	pull_rbenv_ish exenv
-	pull_rbenv_ish jenv
-
 	if command -v pyenv > /dev/null 2>&1; then
 		for python_version in $(pyenv versions --bare); do
 			(
@@ -177,4 +173,8 @@ if [ "$(whoami)" != 'root' ]; then
 			)
 		done
 	fi
+
+	pull_rbenv_ish erlenv
+	pull_rbenv_ish exenv
+	pull_rbenv_ish jenv
 fi
