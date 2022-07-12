@@ -60,7 +60,9 @@ upgrade_python() {
 
 if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 	if command -v apt > /dev/null 2>&1; then
-		apt update && apt dist-upgrade -y && apt autoremove -y
+		apt update
+		apt dist-upgrade -y
+		apt autoremove -y
 		echo
 	fi
 
