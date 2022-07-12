@@ -32,13 +32,12 @@ upgrade_ruby() {
 	if ruby -e "exit Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') ? 0 : 1"; then
 		ruby_version="$(ruby -e 'puts RUBY_VERSION')"
 
-		echo "Updating RubyGems for Ruby $ruby_version…"
-		gem install rubygems-update bundler
-		gem update --system
+		echo "Updating default gems for Ruby $ruby_version…"
+		xargs gem install < "$HOME/.default-gems"
 		echo
 
-		echo "Updating Pry for Ruby $ruby_version…"
-		gem update pry pry-rails pry-doc
+		echo "Updating RubyGems for Ruby $ruby_version…"
+		gem update --system
 		echo
 	fi
 }
@@ -47,29 +46,16 @@ upgrade_node() {
 	node_version="$(node --version)"
 
 	echo "Updating NPM/Yarn for Node $node_version…"
-	npm update --global npm@latest
-	npm update --global yarn@latest
+	xargs npm update --global < "$HOME/.default-npm-packages"
 	echo
 }
 
-pip_package_exists() {
-	package="$1"
+upgrade_python() {
+	python_version="$(python --version 2>&1 | sed -e 's/^Python\b\s*//')"
 
-	if command -v pip > /dev/null 2>&1; then
-		if pip list 2> /dev/null | tail -n +3 | awk -v "package=$package" 'BEGIN { rc = 1 } $1 == package { rc = 0; exit } END { exit rc }'; then
-			return 0
-		fi
-	fi
-
-	return 1
-}
-
-try_upgrade_pip_package() {
-	package="$1"
-
-	if pip_package_exists "$package"; then
-		pip install --upgrade --upgrade-strategy eager "$package" "$@"
-	fi
+	echo "Updating default packages for Python $python_version"
+	xargs pip install --upgrade --upgrade-strategy eager < "$HOME/.default-python-packages"
+	echo
 }
 
 if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
@@ -147,6 +133,13 @@ if [ "$(whoami)" != 'root' ]; then
 						upgrade_node
 					)
 				done
+			elif [ "$plugin" = 'python' ]; then
+				for version in $(asdf list "$plugin"); do
+					(
+						export ASDF_PYTHON_VERSION="$version"
+						upgrade_python
+					)
+				done
 			fi
 		done
 	fi
@@ -180,8 +173,7 @@ if [ "$(whoami)" != 'root' ]; then
 		for python_version in $(pyenv versions --bare); do
 			(
 				export PYENV_VERSION="$python_version"
-
-				try_upgrade_pip_package pip
+				upgrade_python
 			)
 		done
 	fi
