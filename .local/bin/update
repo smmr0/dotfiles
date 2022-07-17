@@ -68,6 +68,9 @@ if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 
 	if command -v snap > /dev/null 2>&1; then
 		snap refresh
+		curl --silent --show-error --get --data select=all --unix-socket /run/snapd.socket http://localhost/v2/snaps |
+			jq -r '.result[] | select(.status != "active") | "\(.name)\t\(.revision)"' |
+			while read line; do snap remove "$(echo "$line" | cut -f 1)" --revision "$(echo "$line" | cut -f 2)"; done
 		echo
 	fi
 
