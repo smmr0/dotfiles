@@ -112,7 +112,7 @@ if [ "$(whoami)" != 'root' ]; then
 				asdf install "$plugin" "$(asdf latest "$plugin" 2)"
 				asdf install "$plugin" latest
 			elif [ "$plugin" = 'java' ] && asdf list "$plugin" | grep -q '^\s*openjdk-'; then
-				asdf install "$plugin" "$(asdf latest java openjdk)"
+				asdf install "$plugin" "$(asdf latest "$plugin" openjdk)"
 			else
 				asdf install "$plugin" latest
 			fi
