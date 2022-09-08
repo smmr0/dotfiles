@@ -61,7 +61,13 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 # Modified from Ubuntu's defaults to include Git prompt
-. ~/.local/share/git/git-prompt.sh
+if [ -f "$HOME/.local/share/git/git-prompt.sh" ]; then
+	. "$HOME/.local/share/git/git-prompt.sh"
+else
+	__git_ps1() {
+		:
+	}
+fi
 GIT_PS1_SHOWDIRTYSTATE=true
 GIT_PS1_SHOWSTASHSTATE=true
 GIT_PS1_SHOWUNTRACKEDFILES=true
