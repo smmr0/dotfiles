@@ -33,7 +33,11 @@ upgrade_ruby() {
 		ruby_version="$(ruby -e 'puts RUBY_VERSION')"
 
 		echo "Updating default gems for Ruby $ruby_version…"
-		xargs gem install < "$HOME/.default-gems"
+		gem list | grep -E '^[^[:space:]]+[[:space:]]+\(([^[:space:])]+,[[:space:]]*)*default:' | cut -d ' ' -f 1 | xargs gem update
+		echo
+
+		echo "Updating user default gems for Ruby $ruby_version…"
+		xargs gem update < "$HOME/.default-gems"
 		echo
 
 		echo "Updating RubyGems for Ruby $ruby_version…"
