@@ -60,7 +60,7 @@ configure_rbenv_ish "$HOME/.rbenv" rbenv
 
 add_to_path "$HOME/.asdf/bin"
 if which asdf > /dev/null 2>&1; then
-	. "$(realpath "$(dirname "$(realpath "$(which asdf)")")/../asdf.sh")"
+	. "$(realpath "$(dirname "$(realpath "$(which asdf)")")/../libexec/asdf.sh")"
 fi
 
 add_to_path "$HOME/.yarn/bin"
