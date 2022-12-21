@@ -28,6 +28,10 @@ pull_rbenv_ish() {
 	fi
 }
 
+asdf_list() {
+	asdf list "$@" | sed 's/^[[:space:]]*\**//'
+}
+
 upgrade_ruby() {
 	if ruby -e "exit Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') ? 0 : 1"; then
 		ruby_version="$(ruby -e 'puts RUBY_VERSION')"
@@ -115,7 +119,7 @@ if [ "$(whoami)" != 'root' ]; then
 			if [ "$plugin" = 'python' ]; then
 				asdf install "$plugin" "$(asdf latest "$plugin" 2)"
 				asdf install "$plugin" latest
-			elif [ "$plugin" = 'java' ] && asdf list "$plugin" | grep -q '^\s*openjdk-'; then
+			elif [ "$plugin" = 'java' ] && asdf_list "$plugin" | grep -q '^\s*openjdk-'; then
 				asdf install "$plugin" "$(asdf latest "$plugin" openjdk)"
 			else
 				asdf install "$plugin" latest
@@ -123,7 +127,7 @@ if [ "$(whoami)" != 'root' ]; then
 
 			if [ "$plugin" = 'python' ]; then
 				:
-			elif [ "$plugin" = 'java' ] && asdf list "$plugin" | grep -q '^\s*openjdk-'; then
+			elif [ "$plugin" = 'java' ] && asdf_list "$plugin" | grep -q '^\s*openjdk-'; then
 				asdf global "$plugin" "$(asdf latest java openjdk)"
 			else
 				asdf global "$plugin" latest
@@ -132,21 +136,21 @@ if [ "$(whoami)" != 'root' ]; then
 			echo
 
 			if [ "$plugin" = 'ruby' ]; then
-				for version in $(asdf list "$plugin"); do
+				for version in $(asdf_list "$plugin"); do
 					(
 						export ASDF_RUBY_VERSION="$version"
 						upgrade_ruby
 					)
 				done
 			elif [ "$plugin" = 'nodejs' ]; then
-				for version in $(asdf list "$plugin"); do
+				for version in $(asdf_list "$plugin"); do
 					(
 						export ASDF_NODEJS_VERSION="$version"
 						upgrade_node
 					)
 				done
 			elif [ "$plugin" = 'python' ]; then
-				for version in $(asdf list "$plugin"); do
+				for version in $(asdf_list "$plugin"); do
 					(
 						export ASDF_PYTHON_VERSION="$version"
 						upgrade_python
