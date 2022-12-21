@@ -128,7 +128,7 @@ if [ "$(whoami)" != 'root' ]; then
 			if [ "$plugin" = 'python' ]; then
 				:
 			elif [ "$plugin" = 'java' ] && asdf_list "$plugin" | grep -q '^\s*openjdk-'; then
-				asdf global "$plugin" "$(asdf latest java openjdk)"
+				asdf global "$plugin" "$(asdf latest "$plugin" openjdk)"
 			else
 				asdf global "$plugin" latest
 			fi
