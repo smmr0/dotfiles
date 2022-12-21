@@ -59,7 +59,7 @@ upgrade_node() {
 }
 
 upgrade_python() {
-	python_version="$(python --version 2>&1 | sed -e 's/^Python\b\s*//')"
+	python_version="$(python --version 2>&1 | sed -e 's/^Python\b[[:space:]]*//')"
 
 	echo "Updating default packages for Python $python_version"
 	xargs pip install --upgrade --upgrade-strategy eager < "$HOME/.default-python-packages"
@@ -119,7 +119,7 @@ if [ "$(whoami)" != 'root' ]; then
 			if [ "$plugin" = 'python' ]; then
 				asdf install "$plugin" "$(asdf latest "$plugin" 2)"
 				asdf install "$plugin" latest
-			elif [ "$plugin" = 'java' ] && asdf_list "$plugin" | grep -q '^\s*openjdk-'; then
+			elif [ "$plugin" = 'java' ] && asdf_list "$plugin" | grep -q '^[[:space:]]*openjdk-'; then
 				asdf install "$plugin" "$(asdf latest "$plugin" openjdk)"
 			else
 				asdf install "$plugin" latest
@@ -127,7 +127,7 @@ if [ "$(whoami)" != 'root' ]; then
 
 			if [ "$plugin" = 'python' ]; then
 				:
-			elif [ "$plugin" = 'java' ] && asdf_list "$plugin" | grep -q '^\s*openjdk-'; then
+			elif [ "$plugin" = 'java' ] && asdf_list "$plugin" | grep -q '^[[:space:]]*openjdk-'; then
 				asdf global "$plugin" "$(asdf latest "$plugin" openjdk)"
 			else
 				asdf global "$plugin" latest
