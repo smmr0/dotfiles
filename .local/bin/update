@@ -117,15 +117,6 @@ if [ "$(whoami)" != 'root' ]; then
 			asdf plugin update "$plugin"
 
 			if [ "$plugin" = 'python' ]; then
-				asdf install "$plugin" "$(asdf latest "$plugin" 2)"
-				asdf install "$plugin" latest
-			elif [ "$plugin" = 'java' ] && asdf_list "$plugin" | grep -q '^[[:space:]]*openjdk-'; then
-				asdf install "$plugin" "$(asdf latest "$plugin" openjdk)"
-			else
-				asdf install "$plugin" latest
-			fi
-
-			if [ "$plugin" = 'python' ]; then
 				:
 			elif [ "$plugin" = 'java' ] && asdf_list "$plugin" | grep -q '^[[:space:]]*openjdk-'; then
 				asdf global "$plugin" "$(asdf latest "$plugin" openjdk)"
