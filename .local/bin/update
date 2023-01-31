@@ -71,6 +71,7 @@ if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 		apt update
 		apt --with-new-pkgs upgrade -y
 		apt autoremove -y
+		apt autoclean -y
 		echo
 	fi
 
