@@ -17,6 +17,8 @@
 	rebase = false
 [fetch]
 	prune = true
+[diff]
+	algorithm = histogram
 [merge]
 	conflictStyle = diff3
 [commit]
