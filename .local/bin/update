@@ -56,6 +56,8 @@ upgrade_node() {
 	echo "Updating NPM/Yarn for Node $node_version…"
 	xargs npm update --global < "$HOME/.default-npm-packages"
 	echo
+
+	corepack enable || true
 }
 
 upgrade_python() {
