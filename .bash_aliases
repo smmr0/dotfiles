@@ -1,3 +1,6 @@
+alias nom='kill'
+alias nomall='killall'
+
 alias bim='vim'
 alias be='bundle exec'
 alias yr='yarn run --silent'
