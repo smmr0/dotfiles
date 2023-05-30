@@ -86,10 +86,6 @@ if [ -n "$XDG_DATA_DIRS" ]; then
 	export XDG_DATA_DIRS="$(pathmerge "$XDG_DATA_DIRS")"
 fi
 
-export LESS="${LESS}iR"
-
-export RUBYOPT="${RUBYOPT+$RUBYOPT }-r$HOME/.local/share/ruby/requires/numeric"
-
 if [ -n "$BASH_VERSION" ]; then
 	if [ -f "$HOME/.bashrc" ]; then
 		. "$HOME/.bashrc"
