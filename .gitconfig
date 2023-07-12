@@ -25,7 +25,10 @@
 	verbose = 2
 [log]
 	date = iso8601-strict
+	showSignature = true
 [gpg]
 	program = gpg2
+[gpg "ssh"]
+	allowedSignersFile = ~/.ssh/allowed_signers
 [include]
 	path = ~/.gitconfig.local
