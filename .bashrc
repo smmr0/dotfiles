@@ -60,7 +60,6 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-# Modified from Ubuntu's defaults to include Git prompt
 if [ -f "$HOME/.local/share/git/git-prompt.sh" ]; then
 	. "$HOME/.local/share/git/git-prompt.sh"
 else
@@ -73,6 +72,8 @@ GIT_PS1_SHOWSTASHSTATE=true
 GIT_PS1_SHOWUNTRACKEDFILES=true
 GIT_PS1_SHOWUPSTREAM=auto
 GIT_PS1_STATESEPARATOR=
+
+# Modified from Ubuntu's defaults to include Git prompt
 if [ "$color_prompt" = yes ]; then
     if [ -n "$POWERLINE" ]; then
         PS1='${debian_chroot:+($debian_chroot)}\[\033[1;97;45m\]\u@\h\[\033[21;24;35;44m\]\[\033[1;97m\]\w\[\033[34m\]$(__git_ps1 "\[\033[21;24;34;42m\]\[\033[1;97m\]%s\[\033[32m\]")\[\033[49m\]\[\033[0m\]'
