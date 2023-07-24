@@ -76,6 +76,8 @@ GIT_PS1_SHOWSTASHSTATE=true
 GIT_PS1_SHOWUNTRACKEDFILES=true
 GIT_PS1_SHOWUPSTREAM=auto
 GIT_PS1_STATESEPARATOR=
+GIT_PS1_COMPRESSSPARSESTATE=true
+GIT_PS1_SHOWCONFLICTSTATE=yes
 
 # Modified from Ubuntu's defaults to include Git prompt
 if [ "$color_prompt" = yes ]; then
