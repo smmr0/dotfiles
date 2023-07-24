@@ -107,9 +107,6 @@ alias l='ls -CF'
 if [ -f "$HOME/.bash_aliases" ]; then
     . "$HOME/.bash_aliases"
 fi
-if [ -f "$HOME/.bash_aliases.local" ]; then
-    . "$HOME/.bash_aliases.local"
-fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
