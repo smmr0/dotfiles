@@ -1,9 +1,3 @@
-# Mostly borrowed from Ubuntu's defaults
-
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
-
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -79,7 +73,6 @@ GIT_PS1_STATESEPARATOR=
 GIT_PS1_COMPRESSSPARSESTATE=true
 GIT_PS1_SHOWCONFLICTSTATE=yes
 
-# Modified from Ubuntu's defaults to include Git prompt
 if [ "$color_prompt" = yes ]; then
     if [ -n "$POWERLINE" ]; then
         PS1='${debian_chroot:+($debian_chroot)}\[\033[1;97;45m\]\u@\h\[\033[21;24;35;44m\]\[\033[1;97m\]\w\[\033[34m\]$(__git_ps1 "\[\033[21;24;34;42m\]\[\033[1;97m\]%s\[\033[32m\]")\[\033[49m\]\[\033[0m\]'
