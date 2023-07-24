@@ -15,10 +15,12 @@ shopt -s globstar
 
 set -o vi
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x '/usr/bin/lesspipe' ] && eval "$(SHELL=/bin/sh lesspipe)"
+# Make less more friendly for non-text input files, see lesspipe(1)
+if [ -x '/usr/bin/lesspipe' ]; then
+	eval "$(SHELL=/bin/sh lesspipe)"
+fi
 
-if [ -z "${debian_chroot:-}" ] && [ -r '/etc/debian_chroot' ]; then
+if [ -z "${debian_chroot:-}" -a -r '/etc/debian_chroot' ]; then
     debian_chroot="$(cat /etc/debian_chroot)"
 fi
 
@@ -67,7 +69,9 @@ esac
 PROMPT_COMMAND='echo -en "\033]0;$(whoami)@$(hostname -s):$(dirs -0)$(__git_ps1 "@%s")\a"'
 
 if [ -x '/usr/bin/dircolors' ]; then
-    test -r '~/.dircolors' && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    if [ -r '~/.dircolors' ]; then
+        eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    fi
     alias ls='ls --color=auto'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
@@ -114,7 +118,9 @@ if ! shopt -oq posix; then
 		fi
 
 		for completion in "$(brew --prefix)/etc/bash_completion.d/"*; do
-			[[ -r "$completion" ]] && source "$completion"
+			if [ -r "$completion" ]; then
+				. "$completion"
+			fi
 		done
 	fi
 
