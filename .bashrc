@@ -91,10 +91,6 @@ if diff --color=auto /dev/null /dev/null > /dev/null 2>&1; then
 	alias diff='diff --color=auto'
 fi
 
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
 if [ -f "$HOME/.bash_aliases" ]; then
 	. "$HOME/.bash_aliases"
 fi
