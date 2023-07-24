@@ -1,7 +1,7 @@
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-      *) return;;
+	*i*) ;;
+	*) return;;
 esac
 
 HISTCONTROL=ignoreboth
@@ -21,11 +21,11 @@ if [ -x '/usr/bin/lesspipe' ]; then
 fi
 
 if [ -z "${debian_chroot:-}" -a -r '/etc/debian_chroot' ]; then
-    debian_chroot="$(cat /etc/debian_chroot)"
+	debian_chroot="$(cat /etc/debian_chroot)"
 fi
 
 case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
+	xterm-color|*-256color) color_prompt=yes;;
 esac
 
 # __git_ps1 may already be sourced from e.g. /etc/bash_completion.d/git-prompt
@@ -48,40 +48,40 @@ GIT_PS1_COMPRESSSPARSESTATE=true
 GIT_PS1_SHOWCONFLICTSTATE=yes
 
 if [ "$color_prompt" = yes ]; then
-    if [ -n "$POWERLINE" ]; then
-        PS1='${debian_chroot:+($debian_chroot)}\[\033[1;97;45m\]\u@\h\[\033[21;24;35;44m\]\[\033[1;97m\]\w\[\033[34m\]$(__git_ps1 "\[\033[21;24;34;42m\]\[\033[1;97m\]%s\[\033[32m\]")\[\033[49m\]\[\033[0m\]'
-    else
-        PS1='${debian_chroot:+($debian_chroot)}\[\033[1;35m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[0m\]$(__git_ps1 "@\[\033[1;32m\]%s\[\033[0m\]")\[\033[35m\]\$\[\033[0m\] '
-    fi
+	if [ -n "$POWERLINE" ]; then
+		PS1='${debian_chroot:+($debian_chroot)}\[\033[1;97;45m\]\u@\h\[\033[21;24;35;44m\]\[\033[1;97m\]\w\[\033[34m\]$(__git_ps1 "\[\033[21;24;34;42m\]\[\033[1;97m\]%s\[\033[32m\]")\[\033[49m\]\[\033[0m\]'
+	else
+		PS1='${debian_chroot:+($debian_chroot)}\[\033[1;35m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[0m\]$(__git_ps1 "@\[\033[1;32m\]%s\[\033[0m\]")\[\033[35m\]\$\[\033[0m\] '
+	fi
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 "@%s")\$ '
+	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 "@%s")\$ '
 fi
 unset color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
+	xterm*|rxvt*)
+		PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+		;;
+	*)
+		;;
 esac
 PROMPT_COMMAND='echo -en "\033]0;$(whoami)@$(hostname -s):$(dirs -0)$(__git_ps1 "@%s")\a"'
 
 if [ -x '/usr/bin/dircolors' ]; then
-    if [ -r '~/.dircolors' ]; then
-        eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    fi
-    alias ls='ls --color=auto'
-    alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
+	if [ -r '~/.dircolors' ]; then
+		eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+	fi
+	alias ls='ls --color=auto'
+	alias dir='dir --color=auto'
+	alias vdir='vdir --color=auto'
 fi
 
 echo -n | grep --color '' > /dev/null 2>&1
 if [ $? -le 1 ]; then
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
 fi
 # For macOS
 export CLICOLOR=true
@@ -91,7 +91,7 @@ alias la='ls -A'
 alias l='ls -CF'
 
 if [ -f "$HOME/.bash_aliases" ]; then
-    . "$HOME/.bash_aliases"
+	. "$HOME/.bash_aliases"
 fi
 
 if ! shopt -oq posix; then
