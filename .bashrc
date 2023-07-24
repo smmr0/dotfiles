@@ -60,9 +60,13 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-if [ -f "$HOME/.local/share/git/git-prompt.sh" ]; then
-	. "$HOME/.local/share/git/git-prompt.sh"
-else
+# __git_ps1 may already be sourced from e.g. /etc/bash_completion.d/git-prompt
+# on Ubuntu (which in turn sources /usr/lib/git-core/git-sh-prompt); if not, it
+# can be sourced via Git's source code (e.g. via download or sparse checkout) at
+# <https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh> and
+# placed into /etc/bash_completion.d/ or ~/.local/etc/bash_completion.d/, for
+# example.
+if ! command -v __git_ps1 > /dev/null 2>&1; then
 	__git_ps1() {
 		:
 	}
