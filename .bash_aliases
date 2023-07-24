@@ -1,6 +1,9 @@
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+alias l='ls -AFHx'
+alias la='ls -aFl'
+# -h, --human-readable: "with -l and -s, print sizes like 1K 234M 2G etc."
+if la -h /dev/null > /dev/null 2>&1; then
+	alias la="${BASH_ALIASES[la]} -h"
+fi
 
 alias nom='kill'
 alias nomall='killall'
