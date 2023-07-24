@@ -87,6 +87,10 @@ if [ $? -le 1 ]; then
 	alias egrep='egrep --color=auto'
 fi
 
+if diff --color=auto /dev/null /dev/null > /dev/null 2>&1; then
+	alias diff='diff --color=auto'
+fi
+
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
