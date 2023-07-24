@@ -53,6 +53,9 @@ if [ "$color_prompt" = yes ]; then
 	else
 		PS1='${debian_chroot:+($debian_chroot)}\[\033[1;35m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[0m\]$(__git_ps1 "@\[\033[1;32m\]%s\[\033[0m\]")\[\033[35m\]\$\[\033[0m\] '
 	fi
+
+	# For macOS
+	export CLICOLOR=true
 else
 	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 "@%s")\$ '
 fi
@@ -83,8 +86,6 @@ if [ $? -le 1 ]; then
 	alias fgrep='fgrep --color=auto'
 	alias egrep='egrep --color=auto'
 fi
-# For macOS
-export CLICOLOR=true
 
 alias ll='ls -alF'
 alias la='ls -A'
