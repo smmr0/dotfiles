@@ -126,10 +126,8 @@ if ! shopt -oq posix; then
 	fi
 
 
-	if [ -n "$NVM_DIR" ]; then
-		if [ -f "$NVM_DIR/bash_completion" ]; then
-			. "$NVM_DIR/bash_completion"
-		fi
+	if [ -n "$NVM_DIR" -a -f "$NVM_DIR/bash_completion" ]; then
+		. "$NVM_DIR/bash_completion"
 	fi
 
 	if command -v doctl > /dev/null 2>&1; then
