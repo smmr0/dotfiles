@@ -13,8 +13,8 @@ if la -h /dev/null > /dev/null 2>&1; then
 	alias la="${BASH_ALIASES[la]} -h"
 fi
 
-alias nom='kill'
-alias nomall='killall'
+alias stop='kill'
+alias stopall='killall'
 
 alias bim='vim'
 alias be='bundle exec'
