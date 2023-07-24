@@ -12,6 +12,7 @@ alias la='ls -aFl'
 if la -h /dev/null > /dev/null 2>&1; then
 	alias la="${BASH_ALIASES[la]} -h"
 fi
+alias lr='l -R'
 
 alias stop='kill'
 alias stopall='killall'
