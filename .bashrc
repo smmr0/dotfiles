@@ -82,8 +82,8 @@ PROMPT_COMMAND='echo -en "\033]0;$(whoami)@$(hostname -s):$(dirs -0)$(__git_ps1 
 if [ -x '/usr/bin/dircolors' ]; then
     test -r '~/.dircolors' && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
 fi
 
 echo -n | grep --color '' > /dev/null 2>&1
