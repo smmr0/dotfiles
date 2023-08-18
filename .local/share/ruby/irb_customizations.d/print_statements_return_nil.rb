@@ -1,12 +1,12 @@
 require 'pp'
 
 module PrintStatementsReturnNil
-  def p(*_ojbs)
+  def p(*_args, **_kwargs, &_blk)
     super
     nil
   end
 
-  def pp(*_objs)
+  def pp(*_args, **_kwargs, &_blk)
     super
     nil
   end
