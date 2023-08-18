@@ -13,7 +13,7 @@ class Pry
   end
 end
 
-if ENV['RM_INFO']
+if ENV['RM_INFO'] # RubyMine
   def Readline.vi_editing_mode?
     false
   end
