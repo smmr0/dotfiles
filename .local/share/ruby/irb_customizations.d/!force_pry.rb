@@ -1,4 +1,4 @@
-if ENV['FORCE_PRY'] == '1'
+if ENV['FORCE_PRY'] && !ENV['FORCE_PRY'].empty?
   old_stubs = Gem::Specification.class_variable_get(:@@stubs)
   gem_load_error =
     if defined?(Gem::MissingSpecError)
