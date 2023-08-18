@@ -2,8 +2,8 @@ require 'rubygems'
 
 if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.7')
   module IntegerInspectWithDigitGroupings
-    def inspect(*args, **opts)
-      if respond_to?(:digits) && args.empty? && opts.empty?
+    def inspect(*args, **opts, &blk)
+      if respond_to?(:digits) && args.empty? && opts.empty? && !blk
         groups = abs.digits(1000).reverse
         padded_groups = [(positive? ? groups.first : groups.first * -1).to_s]
         groups.drop(1).each do |group|
@@ -18,7 +18,7 @@ if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.7')
   Integer.prepend IntegerInspectWithDigitGroupings
 
   module FloatInspectWithDigitGroupings
-    def inspect(*_args, **_opts)
+    def inspect(*_args, **_opts, &_blk)
       case self
       when self.class::INFINITY
         super
