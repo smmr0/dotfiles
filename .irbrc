@@ -1,6 +1,6 @@
 require 'pp'
 
-IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
+IRB.conf[:HISTORY_FILE] = Pathname.new(ENV['HOME']).join('.irb_history')
 IRB.conf[:SAVE_HISTORY] = 1_000
 
 module PrintStatementsReturnNil
