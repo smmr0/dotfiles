@@ -1,4 +1,7 @@
+require 'pathname'
 require 'readline'
+
+require Pathname.new(ENV['HOME']).join('.local', 'share', 'ruby', 'irb_customizations')
 
 class Pry
   class Command
