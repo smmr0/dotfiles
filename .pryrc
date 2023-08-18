@@ -28,7 +28,7 @@ Pry.config.color =
   ENV['RM_INFO'] # RubyMine
 
 Pry::Prompt.add(
-  :custom,
+  :summer,
   nil
 ) do |context, nesting, pry_instance, sep|
   if pry_instance.color
@@ -48,7 +48,7 @@ Pry::Prompt.add(
   end
 end
 Pry::Prompt.add(
-  :custom_powerline,
+  :summer_powerline,
   nil,
   %w[> *]
 ) do |context, nesting, pry_instance, sep|
@@ -62,7 +62,7 @@ Pry::Prompt.add(
   PROMPT
 end
 Pry::Prompt.add(
-  :custom_rails,
+  :summer_rails,
   nil
 ) do |context, nesting, pry_instance, sep|
   project_name =
@@ -91,7 +91,7 @@ Pry::Prompt.add(
   end
 end
 Pry::Prompt.add(
-  :custom_rails_powerline,
+  :summer_rails_powerline,
   nil,
   %w[> *]
 ) do |context, nesting, pry_instance, sep|
@@ -120,15 +120,15 @@ Pry.config.prompt =
   else
     if defined?(Rails)
       if Pry.config.color && ENV['POWERLINE'] == '1'
-        Pry::Prompt[:custom_rails_powerline]
+        Pry::Prompt[:summer_rails_powerline]
       else
-        Pry::Prompt[:custom_rails]
+        Pry::Prompt[:summer_rails]
       end
     else
       if Pry.config.color && ENV['POWERLINE'] == '1'
-        Pry::Prompt[:custom_powerline]
+        Pry::Prompt[:summer_powerline]
       else
-        Pry::Prompt[:custom]
+        Pry::Prompt[:summer]
       end
     end
   end
