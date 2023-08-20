@@ -119,13 +119,13 @@ Pry.config.prompt =
     Pry::Prompt[:simple]
   else
     if defined?(Rails)
-      if Pry.config.color && ENV['POWERLINE'] == '1'
+      if Pry.config.color && ENV['POWERLINE'] && !ENV['POWERLINE'].empty?
         Pry::Prompt[:summer_rails_powerline]
       else
         Pry::Prompt[:summer_rails]
       end
     else
-      if Pry.config.color && ENV['POWERLINE'] == '1'
+      if Pry.config.color && ENV['POWERLINE'] && !ENV['POWERLINE'].empty?
         Pry::Prompt[:summer_powerline]
       else
         Pry::Prompt[:summer]
