@@ -7,15 +7,15 @@ fi
 if [ "$PWD" = "$HOME" ]; then
 	last_tmux_sess_id="$(tmux ls -F '#{session_activity} #{session_attached} #{session_id}' 2> /dev/null | sort -nr | awk '$2 == "0" { print $3 }' | head -1)"
 	if [ -n "$last_tmux_sess_id" ]; then
-		tmux a -t "$last_tmux_sess_id"
+		exec tmux a -t "$last_tmux_sess_id"
 	else
-		tmux
+		exec tmux
 	fi
 else
 	last_tmux_sess_id="$(tmux ls -F '#{session_activity} #{session_attached} #{session_id} #{pane_current_path}' 2> /dev/null | sort -nr | awk -v "pwd=$PWD" '{ attached = $2; sess = $3; $1 = ""; $2 = ""; $3 = ""; if (attached == "0" && substr($0,4) == pwd) { print sess } }' | head -1)"
 	if [ -n "$last_tmux_sess_id" ]; then
-		tmux a -t "$last_tmux_sess_id"
+		exec tmux a -t "$last_tmux_sess_id"
 	else
-		tmux
+		exec tmux
 	fi
 fi
