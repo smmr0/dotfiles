@@ -2,7 +2,6 @@
 	name = Summer ☀️
 	email = git@summerm.dev
 [core]
-	editor = vim
 	hooksPath = ~/.config/git/hooks
 	excludesfile = ~/.gitignore_global
 	autocrlf = input
