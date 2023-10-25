@@ -4,7 +4,11 @@ export REPORT_FILE="$TODO_DIR/report.txt"
 export TODOTXT_AUTO_ARCHIVE=0
 export TODOTXT_PRESERVE_LINE_NUMBERS=0
 export TODOTXT_DATE_ON_ADD=1
-export TODOTXT_DEFAULT_ACTION=ls
+if [ -x "$TODO_ACTIONS_DIR/future" ]; then
+	export TODOTXT_DEFAULT_ACTION=future
+else
+	export TODOTXT_DEFAULT_ACTION=ls
+fi
 
 export COLOR_NUMBER=$CYAN
 export COLOR_DATE=$PURPLE
