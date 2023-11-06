@@ -5,14 +5,16 @@ set -euf -o pipefail
 # https://stackoverflow.com/a/246128/2384183
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+PREFIX="${PREFIX:-$HOME}"
+
 # Loop through every file in source directory and sub directories except .git
 # subdirectory and this script
 IFS=$'\n'
 for f in $(find "$dir" \( -path "$dir/.git" -o -name '.*.swp' -o -path "$dir/setup.sh" \) -prune -o -type f -print | sort); do
 	relative_path=$(realpath --relative-to="$dir" "$f")
 	container=$(dirname "$relative_path")
-	dest="$HOME/$relative_path"
-	dest_container="$HOME/$container"
+	dest="$PREFIX/$relative_path"
+	dest_container="$PREFIX/$container"
 
 	mkdir -p "$dest_container"
 
