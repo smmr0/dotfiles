@@ -1,34 +1,37 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-set -euf -o pipefail
+set -euf
 
-# https://stackoverflow.com/a/246128/2384183
-dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# https://stackoverflow.com/a/29835459/16330198
+dir="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)"
 
 PREFIX="${PREFIX:-$HOME}"
 
 # Loop through every file in source directory and sub directories except .git
 # subdirectory and this script
-IFS=$'\n'
-for f in $(find "$dir" \( -path "$dir/.git" -o -name '.*.swp' -o -path "$dir/setup.sh" \) -prune -o -type f -print | sort); do
-	relative_path=$(realpath --relative-to="$dir" "$f")
-	container=$(dirname "$relative_path")
+files="$(find "$dir" \( -path "$dir/.git" -o -name '.*.swp' -o -path "$dir/setup.sh" \) -prune -o -type f -print | sort)"
+until [ -z "$files" ]; do
+	f="$(echo "$files" | head -1)"
+	files="$(echo "$files" | tail -n +2)"
+
+	relative_path="$(realpath --relative-to="$dir" "$f")"
+	container="$(dirname "$relative_path")"
 	dest="$PREFIX/$relative_path"
 	dest_container="$PREFIX/$container"
 
 	mkdir -p "$dest_container"
 
-	if diff -q "$f" "$dest" &> /dev/null; then
+	if diff -q "$f" "$dest" > /dev/null 2>&1; then
 		echo "Skipping identical $relative_path"
 		continue
 	fi
 
 	if [ -s "$dest" ]; then
 		resp=
-		until [ "$resp" = 'y' -o "$resp" = 'n' ]; do
-			echo -n "Do you want to replace ~/$relative_path? (y/n/d/q) "
-			read resp
-			resp=$(echo -n "${resp:0:1}" | tr '[:upper:]' '[:lower:]')
+		until [ "$resp" = 'y' ] || [ "$resp" = 'n' ]; do
+			printf "Replace ~/%s? (y/n/d/q) " "$relative_path"
+			read -r resp
+			resp="$(printf '%.1s' "$resp" | tr '[:upper:]' '[:lower:]')"
 			if [ "$resp" = 'y' ]; then
 				if command -v trash > /dev/null 2>&1; then
 					trash "$dest"
