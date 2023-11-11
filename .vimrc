@@ -18,6 +18,7 @@ command WQ wq
 command Wq wq
 command CQ cq
 command Cq cq
+map Y y$
 filetype plugin indent on
 syntax on
 
