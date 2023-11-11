@@ -23,7 +23,7 @@ filetype plugin indent on
 syntax on
 
 set background=light
-colorscheme solarized
+silent! colorscheme solarized
 
 autocmd BufNewFile,BufRead *.pryrc set syntax=ruby
 autocmd BufNewFile,BufRead *.pryrc source $HOME/.vim/indent/ruby.vim
