@@ -20,7 +20,7 @@ if [ -x '/usr/bin/lesspipe' ]; then
 	eval "$(SHELL=/bin/sh lesspipe)"
 fi
 
-if [ -z "${debian_chroot:-}" -a -r '/etc/debian_chroot' ]; then
+if [ -z "${debian_chroot:-}" ] && [ -r '/etc/debian_chroot' ]; then
 	debian_chroot="$(cat /etc/debian_chroot)"
 fi
 
@@ -71,9 +71,9 @@ case "$TERM" in
 esac
 PROMPT_COMMAND='echo -en "\033]0;$(whoami)@$(hostname -s):$(dirs -0)$(__git_ps1 "@%s")\a"'
 
-if [ -x '/usr/bin/dircolors' ]; then
-	if [ -r '~/.dircolors' ]; then
-		eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+if command -v dircolors > /dev/null 2>&1; then
+	if [ -r "$HOME/.dircolors" ]; then
+		eval "$(dircolors -b "$HOME/.dircolors")" || eval "$(dircolors -b)"
 	fi
 	alias ls='ls --color=auto'
 	alias dir='dir --color=auto'
@@ -126,7 +126,7 @@ if ! shopt -oq posix; then
 	fi
 
 
-	if [ -n "$NVM_DIR" -a -f "$NVM_DIR/bash_completion" ]; then
+	if [ -n "$NVM_DIR" ] && [ -f "$NVM_DIR/bash_completion" ]; then
 		. "$NVM_DIR/bash_completion"
 	fi
 
