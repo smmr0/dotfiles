@@ -69,11 +69,11 @@ upgrade_python() {
 }
 
 if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
-	if command -v apt > /dev/null 2>&1; then
-		apt update
-		apt --with-new-pkgs upgrade -y
-		apt autoremove -y
-		apt autoclean -y
+	if command -v apt-get > /dev/null 2>&1; then
+		apt-get update
+		apt-get --with-new-pkgs upgrade -y
+		apt-get autoremove -y
+		apt-get autoclean -y
 		echo
 	fi
 
