@@ -91,9 +91,11 @@ if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 		echo
 	fi
 
-	for possible_repo in $(ls /usr/local/src); do
-		try_pull_git_repo "/usr/local/src/$possible_repo"
-	done
+	if [ -d '/usr/local/src' ]; then
+		for possible_repo in $(ls /usr/local/src); do
+			try_pull_git_repo "/usr/local/src/$possible_repo"
+		done
+	fi
 fi
 
 if [ "$(whoami)" != 'root' ]; then
