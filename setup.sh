@@ -14,7 +14,11 @@ until [ -z "$files" ]; do
 	f="$(echo "$files" | head -1)"
 	files="$(echo "$files" | tail -n +2)"
 
-	relative_path="$(realpath --relative-to="$dir" "$f")"
+	if realpath --relative-to=. . > /dev/null 2>&1; then
+		relative_path="$(realpath --relative-to="$dir" "$f")"
+	else
+		relative_path="${f#"$dir/"}"
+	fi
 	container="$(dirname "$relative_path")"
 	dest="$PREFIX/$relative_path"
 	dest_container="$PREFIX/$container"
