@@ -36,15 +36,15 @@ upgrade_ruby() {
 	if ruby -e "exit Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') ? 0 : 1"; then
 		ruby_version="$(ruby -e 'puts RUBY_VERSION')"
 
-		echo "Updating default gems for Ruby $ruby_version…"
+		echo "Updating default gems for Ruby ${ruby_version}…"
 		gem list | grep -E '^[^[:space:]]+[[:space:]]+\(([^[:space:])]+,[[:space:]]*)*default:' | cut -d ' ' -f 1 | xargs gem update
 		echo
 
-		echo "Updating user default gems for Ruby $ruby_version…"
+		echo "Updating user default gems for Ruby ${ruby_version}…"
 		xargs gem update < "$HOME/.default-gems"
 		echo
 
-		echo "Updating RubyGems for Ruby $ruby_version…"
+		echo "Updating RubyGems for Ruby ${ruby_version}…"
 		gem update --system
 		echo
 	fi
@@ -53,7 +53,7 @@ upgrade_ruby() {
 upgrade_node() {
 	node_version="$(node --version)"
 
-	echo "Updating NPM/Yarn for Node $node_version…"
+	echo "Updating NPM/Yarn for Node ${node_version}…"
 	xargs npm update --global < "$HOME/.default-npm-packages"
 	echo
 
@@ -120,7 +120,7 @@ if [ "$(whoami)" != 'root' ]; then
 
 	if command -v asdf > /dev/null 2>&1; then
 		for plugin in $(asdf plugin list); do
-			echo "Upgrading $plugin…"
+			echo "Upgrading ${plugin}…"
 
 			asdf plugin update "$plugin"
 
