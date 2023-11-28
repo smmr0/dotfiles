@@ -11,7 +11,7 @@ HISTFILESIZE=2000
 
 shopt -s checkwinsize
 
-shopt -s globstar
+shopt -s globstar 2> /dev/null || :
 
 set -o vi
 
