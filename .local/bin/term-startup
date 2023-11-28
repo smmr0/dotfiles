@@ -3,6 +3,9 @@
 if [ -f '/etc/profile' ]; then
 	. '/etc/profile'
 fi
+if [ -f "$HOME/.profile" ]; then
+	. "$HOME/.profile"
+fi
 
 if [ "$PWD" = "$HOME" ]; then
 	last_tmux_sess_id="$(tmux ls -F '#{session_activity} #{session_attached} #{session_id}' 2> /dev/null | sort -nr | awk '$2 == "0" { print $3 }' | head -1)"
