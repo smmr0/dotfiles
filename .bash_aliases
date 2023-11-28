@@ -7,10 +7,11 @@ if ls -1 /dev/null > /dev/null 2>&1; then
 	alias ls="${BASH_ALIASES[ls]:-ls} -1"
 fi
 alias l='ls -AFHx'
-alias la='ls -aFl'
 # -h, --human-readable: "with -l and -s, print sizes like 1K 234M 2G etc."
-if la -h /dev/null > /dev/null 2>&1; then
-	alias la="${BASH_ALIASES[la]} -h"
+if ls -h /dev/null > /dev/null 2>&1; then
+	alias la='ls -aFlh'
+else
+	alias la='ls -aFl'
 fi
 alias lr='l -R'
 
