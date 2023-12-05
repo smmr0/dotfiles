@@ -32,11 +32,11 @@ fi
 if [ -d "$HOME/.linuxbrew" ]; then
 	eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
 fi
-if [ -d "/home/linuxbrew/.linuxbrew" ]; then
-	eval "$("/home/linuxbrew/.linuxbrew/bin/brew" shellenv)"
+if [ -d '/home/linuxbrew/.linuxbrew' ]; then
+	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
-if [ -d "/opt/homebrew" ]; then
-	eval "$("/opt/homebrew/bin/brew" shellenv)"
+if [ -d '/opt/homebrew' ]; then
+	eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 if [ -d "$HOME/.nvm" ]; then
