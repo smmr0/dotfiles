@@ -78,15 +78,19 @@ add_to_path "$HOME/.yarn/bin"
 add_to_path "$HOME/.local/bin"
 add_to_path "$HOME/bin"
 
-# http://membled.com/work/apps/pathmerge/
-export PATH="$(pathmerge "$PATH")"
+if command -v pathmerge > /dev/null 2>&1; then
+	# http://membled.com/work/apps/pathmerge/
+	export PATH="$(pathmerge "$PATH")"
+fi
 
 if [ -n "$XDG_DATA_DIRS" ]; then
 	if [ -d "$HOME/.local/share" ]; then
 		XDG_DATA_DIRS="$HOME/.local/share:$XDG_DATA_DIRS"
 	fi
 
-	export XDG_DATA_DIRS="$(pathmerge "$XDG_DATA_DIRS")"
+	if command -v pathmerge > /dev/null 2>&1; then
+		export XDG_DATA_DIRS="$(pathmerge "$XDG_DATA_DIRS")"
+	fi
 fi
 
 if [ -n "$BASH_VERSION" ]; then
