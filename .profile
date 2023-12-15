@@ -29,6 +29,7 @@ if [ -f "$HOME/.env" ]; then
 	. "$HOME/.env"
 fi
 
+path_without_brew="$PATH"
 if [ -d "$HOME/.linuxbrew" ]; then
 	eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
 fi
@@ -38,6 +39,7 @@ fi
 if [ -d '/opt/homebrew' ]; then
 	eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
+PATH="$path_without_brew:$PATH" # Move Homebrew to end of `PATH`
 
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
