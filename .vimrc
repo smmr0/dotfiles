@@ -32,6 +32,7 @@ autocmd BufNewFile,BufRead *.pryrc source $HOME/.vim/indent/ruby.vim
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 let g:markdown_recommended_style = 0
+let g:python_recommended_style = 0
 
 " vim-gitgutter
 let g:gitgutter_enabled = 1
