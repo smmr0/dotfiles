@@ -31,6 +31,8 @@ autocmd BufNewFile,BufRead *.pryrc source $HOME/.vim/indent/ruby.vim
 " Jump to the last position when reopening a file
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
+let g:markdown_recommended_style = 0
+
 " vim-gitgutter
 let g:gitgutter_enabled = 1
 highlight! link SignColumn LineNr
