@@ -13,6 +13,7 @@ if ls -h /dev/null > /dev/null 2>&1; then
 else
 	alias la='ls -aFl'
 fi
+alias l1='l -1'
 alias lr='l -R'
 
 alias stop='kill'
