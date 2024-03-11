@@ -3,7 +3,6 @@
 	email = git@summerm.dev
 [core]
 	hooksPath = ~/.config/git/hooks
-	excludesfile = ~/.gitignore_global
 	autocrlf = input
 	pager = less -F
 [format]
