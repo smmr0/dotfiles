@@ -19,7 +19,7 @@ if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.7')
 
   module FloatInspectWithDigitGroupings
     def inspect(*_args, **_kwargs, &_blk)
-      case self
+      case abs
       when self.class::INFINITY
         super
       else
