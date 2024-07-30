@@ -52,9 +52,15 @@ upgrade_ruby() {
 
 upgrade_node() {
 	node_version="$(node --version)"
+	node_major_version="$(echo "$node_version" | sed 's/^[^[:digit:]]*//' | sed 's/[^[:digit:]].*$//')"
 
 	echo "Updating NPM/Yarn for Node ${node_version}…"
-	xargs npm update --global < "$HOME/.default-npm-packages"
+	if [ "$node_major_version" -lt 18 ]; then
+		npm install --global npm@9
+		sed '/^npm$/d' < "$HOME/.default-npm-packages" | xargs npm update --global
+	else
+		xargs npm update --global < "$HOME/.default-npm-packages"
+	fi
 	echo
 
 	corepack enable || true
