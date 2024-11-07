@@ -74,6 +74,14 @@ upgrade_python() {
 	echo
 }
 
+upgrade_elixir() {
+	if [ -f "$HOME/.default-mix-commands" ]; then
+		while read mix_command; do
+			mix $mix_command --force
+		done < "$HOME/.default-mix-commands"
+	fi
+}
+
 if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 	if command -v apt-get > /dev/null 2>&1; then
 		apt-get update
@@ -149,6 +157,13 @@ if [ "$(whoami)" != 'root' ]; then
 					(
 						export ASDF_PYTHON_VERSION="$version"
 						upgrade_python
+					)
+				done
+			elif [ "$plugin" = 'elixir' ]; then
+				for version in $(asdf_list "$plugin"); do
+					(
+						export ASDF_ELIXIR_VERSION="$version"
+						upgrade_elixir
 					)
 				done
 			fi
