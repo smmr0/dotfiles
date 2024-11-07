@@ -3,3 +3,4 @@ bundler
 pry
 pry-doc
 pry-rails
+debase-ruby_core_source
