@@ -113,7 +113,7 @@ if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 fi
 
 if [ "$(whoami)" != 'root' ]; then
-	if command -v sudo > /dev/null 2>&1; then
+	if command -v sudo > /dev/null 2>&1 && [ -z "${SUMMER_UPDATE_SKIP_ROOT-}" ]; then
 		sudo "$(realpath "$0")" "$@" # Re-run script with sudo
 	fi
 
