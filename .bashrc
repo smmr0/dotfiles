@@ -48,6 +48,8 @@ GIT_PS1_COMPRESSSPARSESTATE=true
 GIT_PS1_SHOWCONFLICTSTATE=yes
 
 if [ "$color_prompt" = yes ]; then
+	# https://misc.flogisoft.com/bash/tip_colors_and_formatting
+
 	if [ -n "$POWERLINE" ]; then
 		PS1='${debian_chroot:+($debian_chroot)}\[\033[1;97;$([ "$(id -u)" = 0 ] && echo 41 || echo 45)m\]\u@\h\[\033[21;24;$([ "$(id -u)" = 0 ] && echo 31 || echo 35);44m\]\[\033[1;97m\]\w\[\033[34m\]$(__git_ps1 "\[\033[21;24;34;42m\]\[\033[1;97m\]%s\[\033[32m\]")\[\033[49m\]\[\033[0m\]'
 	else
