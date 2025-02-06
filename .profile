@@ -63,17 +63,8 @@ fi
 configure_rbenv_ish "$HOME/.nodenv" nodenv
 configure_rbenv_ish "$HOME/.rbenv" rbenv
 
-add_to_path "$HOME/.asdf/bin"
-if which asdf > /dev/null 2>&1; then
-	case "$(which asdf)" in
-		"$(brew --prefix)"/*)
-			. "$(brew --prefix asdf)/libexec/asdf.sh"
-			;;
-		*)
-			. "$(realpath "$(dirname "$(realpath "$(which asdf)")")/../libexec/asdf.sh")"
-			;;
-	esac
-fi
+add_to_path "${ASDF_DATA_DIR:-$HOME/.asdf}/bin"
+add_to_path "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
 
 add_to_path "$HOME/.yarn/bin"
 
