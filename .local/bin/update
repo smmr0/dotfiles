@@ -91,6 +91,12 @@ if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 		echo
 	fi
 
+	if command -v dnf > /dev/null 2>&1; then
+		dnf upgrade
+		dnf autoremove
+		echo
+	fi
+
 	if command -v snap > /dev/null 2>&1; then
 		snap refresh
 		curl --silent --show-error --get --data select=all --unix-socket /run/snapd.socket http://localhost/v2/snaps |
