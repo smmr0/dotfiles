@@ -92,8 +92,8 @@ if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
 	fi
 
 	if command -v dnf > /dev/null 2>&1; then
-		dnf upgrade
-		dnf autoremove
+		dnf upgrade -y
+		dnf autoremove -y
 		echo
 	fi
 
