@@ -23,10 +23,19 @@ alias bim='vim'
 alias be='bundle exec'
 alias yr='yarn run --silent'
 
-alias todo='todo.sh'
-complete -F _todo todo
-alias t='todo'
-complete -F _todo t
+if command -v todo.sh > /dev/null 2>&1; then
+	alias todo='todo.sh'
+	alias t='todo'
+
+	# mkdir -p ~/.local/share/bash-completion/completions
+	# cd ~/.local/share/bash-completion/completions
+	# ln -s /path/to/todo.txt-cli/todo_completion todo.sh
+	# https://github.com/scop/bash-completion/issues/521#issuecomment-2338162329
+	if complete -p todo.sh 2> /dev/null || _comp_load todo.sh 2> /dev/null; then
+		complete -F _todo todo
+		complete -F _todo t
+	fi
+fi
 
 if [ -f "$HOME/.bash_aliases.local" ]; then
 	. "$HOME/.bash_aliases.local"

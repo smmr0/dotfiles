@@ -98,22 +98,6 @@ if [ -f "$HOME/.bash_aliases" ]; then
 fi
 
 if ! shopt -oq posix; then
-	if [ -f "$PREFIX/usr/share/bash-completion/bash_completion" ]; then
-		. "$PREFIX/usr/share/bash-completion/bash_completion"
-	fi
-
-	if [ -f "$PREFIX/etc/bash_completion" ]; then
-		. "$PREFIX/etc/bash_completion"
-	fi
-
-	if [ -f "$PREFIX/usr/local/etc/bash_completion" ]; then
-		. "$PREFIX/usr/local/etc/bash_completion"
-	fi
-
-	if [ -f "$HOME/.local/etc/bash_completion" ]; then
-		. "$HOME/.local/etc/bash_completion"
-	fi
-
 	# https://docs.brew.sh/Shell-Completion#configuring-completions-in-bash
 	if command -v brew &>/dev/null 2>&1; then
 		if [[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]]; then

@@ -1,3 +1,0 @@
-for file in $(find -L "$HOME/.local/etc/bash_completion.d" -type f); do
-	. "$file"
-done

@@ -2,48 +2,68 @@
 
 set -euf
 
-# https://stackoverflow.com/a/29835459/16330198
-dir="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)"
+relative_path() {
+	f="$1"
+	relative_to="$2"
 
-PREFIX="${PREFIX:-$HOME}"
+	realpath --logical --relative-to="$relative_to" "$f" 2> /dev/null ||
+		echo "${f#"$relative_to/"}" # TODO: Handle traversing up and then down (cousin directories)
+}
+
+source_root="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)" # https://stackoverflow.com/a/29835459/16330198
+dest_root="${PREFIX:-$HOME}"
 
 # Loop through every file in source directory and sub directories except .git
 # subdirectory and this script
-files="$(find "$dir" \( -path "$dir/.git" -o -name '.*.swp' -o -path "$dir/setup.sh" \) -prune -o -type f -print | sort)"
+files="$(
+	find "$source_root" \
+		\( \
+			-path "$source_root/.git" \
+			-o \
+			-name '.*.swp' \
+			-o \
+			-path "$source_root/setup.sh" \
+		\) -prune \
+		-o \
+		-type f \
+		-print \
+		| sort
+)"
 until [ -z "$files" ]; do
-	f="$(echo "$files" | head -1)"
+	source_f="$(echo "$files" | head -1)"
 	files="$(echo "$files" | tail -n +2)"
 
-	if realpath --relative-to=. . > /dev/null 2>&1; then
-		relative_path="$(realpath --relative-to="$dir" "$f")"
-	else
-		relative_path="${f#"$dir/"}"
+	f="$(relative_path "$source_f" "$source_root")"
+	dir="$(dirname "$f")";
+	if [ "$dir" = '.' ]; then dir=; fi
+	dest_f="$dest_root/$f"
+	dest_dir="$dest_root${dir:+"/$dir"}"
+
+	if [ ! -d "$dest_dir" ]; then
+		mkdir -p "$dest_dir"
+
+		if [ "$dir" = '.gnupg' ]; then chmod 700 "$dest_dir"; fi
 	fi
-	container="$(dirname "$relative_path")"
-	dest="$PREFIX/$relative_path"
-	dest_container="$PREFIX/$container"
 
-	mkdir -p "$dest_container"
-
-	if diff -q "$f" "$dest" > /dev/null 2>&1; then
-		echo "Skipping identical $relative_path"
+	if diff -q "$f" "$dest_f" > /dev/null 2>&1; then
+		echo "Skipping identical $f"
 		continue
 	fi
 
-	if [ -s "$dest" ]; then
+	if [ -s "$dest_f" ]; then
 		resp=
 		until [ "$resp" = 'y' ] || [ "$resp" = 'n' ]; do
-			printf "Replace ~/%s? (y/n/d/q) " "$relative_path"
+			printf "Replace ~/%s? (y/n/d/q) " "$f"
 			read -r resp
 			resp="$(printf '%.1s' "$resp" | tr '[:upper:]' '[:lower:]')"
 			if [ "$resp" = 'y' ]; then
 				if command -v trash > /dev/null 2>&1; then
-					trash "$dest"
+					trash "$dest_f"
 				else
-					mv "$dest" "$dest.bak"
+					mv "$dest_f" "$dest_f.bak"
 				fi
 			elif [ "$resp" = 'd' ]; then
-				diff "$dest" "$f" || true
+				diff "$dest_f" "$f" || true
 			elif [ "$resp" = 'q' ]; then
 				exit 0
 			else
@@ -51,17 +71,9 @@ until [ -z "$files" ]; do
 			fi
 		done
 	fi
-	echo "Copying $relative_path"
-	cp "$f" "$dest"
-
-	if [ "$container" = '.gnupg' ]; then
-		chmod 700 "$dest_container"
-		chmod 600 "$dest"
-	fi
-
-	if [ "$container" = '.local/bin' ]; then
-		chmod 755 "$dest"
-	fi
+	echo "Linking $f"
+	(
+		cd "$dest_dir"
+		ln -s "$(relative_path "$source_f" .)" .
+	)
 done
-
-echo 'Done'
