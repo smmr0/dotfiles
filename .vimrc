@@ -22,7 +22,11 @@ map Y y$
 filetype plugin indent on
 syntax on
 
-set background=light
+if $TERM == 'linux' || $XDG_SESSION_TYPE == 'tty'
+	set background=dark
+else
+	set background=light
+endif
 silent! colorscheme solarized
 
 autocmd BufNewFile,BufRead *.pryrc set syntax=ruby
