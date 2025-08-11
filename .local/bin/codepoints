@@ -1,0 +1,14 @@
+#!/usr/bin/sh
+
+uconv -x \
+	'
+		([:Any:]) >
+			$1
+			\t
+			&Hex/Unicode($1)
+			\t
+			&Name($1)
+			\n
+		;
+	' \
+| sed -E 's/(\s)\\N[{](.*)[}]$/\1\2/'
