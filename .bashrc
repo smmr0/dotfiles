@@ -15,6 +15,63 @@ shopt -s globstar 2> /dev/null || :
 
 set -o vi
 
+abbr_path() {
+	path="$1"
+	ellipsis="$2"
+	min_affix_len="$3"
+
+	if [ "$PWD" = '/' ]; then
+		printf '/'
+		return
+	fi
+
+	if ! command -v tac > /dev/null 2> /dev/null && echo | tail -r > /dev/null 2>&1; then
+		tac='tail -r'
+	else
+		tac='tac'
+	fi
+
+	cd "$path"
+
+	while :; do
+		if [ "$PWD" = '/' ]; then
+			echo
+			break
+		fi
+		if [ "$PWD" = "$HOME" ]; then
+			echo '~'
+			break
+		fi
+
+		basename="$(basename "$PWD")"
+
+		if [ "${basename:0:1}" = '.' ]; then
+			prefix_len="$((min_affix_len+1))"
+		else
+			prefix_len="$min_affix_len"
+		fi
+		suffix_len="$min_affix_len"
+
+		while
+			prefix="${basename:0:$prefix_len}"
+			suffix="${basename: -$suffix_len}"
+
+			[ "$(find .. ! -name .. -prune -name "${prefix}*${suffix}" | head -2 | wc -l)" -gt 1 ]
+		do
+			prefix_len="$((prefix_len+1))"
+			suffix_len="$((suffix_len+1))"
+		done
+
+		if [ "$((${#prefix}+${#suffix}+1))" -lt "${#basename}" ]; then
+			echo "$prefix$ellipsis$suffix"
+		else
+			echo "$basename"
+		fi
+
+		cd ..
+	done | $tac | tr $'\n' '/' | sed 's/\/$//'
+}
+
 # Make less more friendly for non-text input files, see lesspipe(1)
 if [ -x '/usr/bin/lesspipe' ]; then
 	eval "$(SHELL=/bin/sh lesspipe)"
@@ -51,15 +108,27 @@ if [ "$color_prompt" = yes ]; then
 	# https://misc.flogisoft.com/bash/tip_colors_and_formatting
 
 	if [ -n "$POWERLINE" ]; then
-		PS1='${debian_chroot:+($debian_chroot)}\[\033[1;97;$([ "$(id -u)" = 0 ] && echo 41 || echo 45)m\]\u@\h\[\033[21;24;$([ "$(id -u)" = 0 ] && echo 31 || echo 35);44m\]\[\033[1;97m\]\w\[\033[34m\]$(__git_ps1 "\[\033[21;24;34;42m\]\[\033[1;97m\]%s\[\033[32m\]")\[\033[49m\]\[\033[0m\]'
+		if [ -n "$ABBR_PATH" ]; then
+			PS1='${debian_chroot:+($debian_chroot)}\[\033[1;97;$([ "$(id -u)" = 0 ] && echo 41 || echo 45)m\]\u@\h\[\033[21;24;$([ "$(id -u)" = 0 ] && echo 31 || echo 35);44m\]\[\033[1;97m\]$(abbr_path . "\[\033[2m\]*\[\033[22;1m\]" 1)\[\033[34m\]$(__git_ps1 "\[\033[21;24;34;42m\]\[\033[1;97m\]%s\[\033[32m\]")\[\033[49m\]\[\033[0m\]'
+		else
+			PS1='${debian_chroot:+($debian_chroot)}\[\033[1;97;$([ "$(id -u)" = 0 ] && echo 41 || echo 45)m\]\u@\h\[\033[21;24;$([ "$(id -u)" = 0 ] && echo 31 || echo 35);44m\]\[\033[1;97m\]\w\[\033[34m\]$(__git_ps1 "\[\033[21;24;34;42m\]\[\033[1;97m\]%s\[\033[32m\]")\[\033[49m\]\[\033[0m\]'
+		fi
 	else
-		PS1='${debian_chroot:+($debian_chroot)}\[\033[1;$([ "$(id -u)" = 0 ] && echo 31 || echo 35)m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[0m\]$(__git_ps1 "@\[\033[1;32m\]%s\[\033[0m\]")\[\033[35m\]\$\[\033[0m\] '
+		if [ -n "$ABBR_PATH" ]; then
+			PS1='${debian_chroot:+($debian_chroot)}\[\033[1;$([ "$(id -u)" = 0 ] && echo 31 || echo 35)m\]\u@\h\[\033[0m\]:\[\033[1;34m\]$(abbr_path . "\[\033[2m\]*\[\033[22;1m\]" 1)\[\033[0m\]$(__git_ps1 "@\[\033[1;32m\]%s\[\033[0m\]")\[\033[35m\]\$\[\033[0m\] '
+		else
+			PS1='${debian_chroot:+($debian_chroot)}\[\033[1;$([ "$(id -u)" = 0 ] && echo 31 || echo 35)m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[0m\]$(__git_ps1 "@\[\033[1;32m\]%s\[\033[0m\]")\[\033[35m\]\$\[\033[0m\] '
+		fi
 	fi
 
 	# For macOS
 	export CLICOLOR=true
 else
-	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 "@%s")\$ '
+	if [ -n "$ABBR_PATH" ]; then
+		PS1='${debian_chroot:+($debian_chroot)}\u@\h:$(abbr_path . "*" 1)$(__git_ps1 "@%s")\$ '
+	else
+		PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 "@%s")\$ '
+	fi
 fi
 unset color_prompt
 
