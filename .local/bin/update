@@ -2,52 +2,145 @@
 
 set -euf
 
+sudo_upgrade() {
+	upgrade_apt
+	upgrade_dnf
+	upgrade_snap
+	upgrade_flatpak
+	pull_usr_local_src
+}
+
+upgrade() {
+	upgrade_brew
+	pull_home_local_src
+	set_up_dotfiles
+	upgrade_asdf
+}
+
 try_pull_git_repo() {
 	repo_dir="$1"
 
-	echo "$repo_dir"
+	if ! git -C "$repo_dir" rev-parse > /dev/null 2>&1; then return; fi
 
-	if git -C "$repo_dir" rev-parse > /dev/null 2>&1; then
-		git -C "$repo_dir" pull 2> /dev/null || true
-	fi
-
-	echo
-}
-
-pull_rbenv_ish() {
-	command="$1"
-
-	if command -v "$command" > /dev/null 2>&1; then
-		try_pull_git_repo "$("$command" root)"
-
-		if [ -d "$("$command" root)/plugins" ]; then
-			for plugin in $(ls "$("$command" root)/plugins"); do
-				try_pull_git_repo "$("$command" root)/plugins/$plugin"
-			done
-		fi
-	fi
+	git -C "$repo_dir" pull 2> /dev/null || true
 }
 
 asdf_list() {
 	asdf list "$@" | sed 's/^[[:space:]]*\**//'
 }
 
+upgrade_apt() {
+	if ! command -v apt-get > /dev/null 2>&1; then return; fi
+
+	apt-get update
+	apt-get --with-new-pkgs upgrade -y
+	apt-get autoremove -y
+	apt-get autoclean -y
+}
+
+upgrade_dnf() {
+	if ! command -v dnf > /dev/null 2>&1; then return; fi
+
+	dnf upgrade -y
+	dnf autoremove -y
+}
+
+upgrade_snap() {
+	if ! command -v snap > /dev/null 2>&1; then return; fi
+
+	snap refresh
+	curl --silent --show-error --get --data select=all --unix-socket /run/snapd.socket http://localhost/v2/snaps |
+		jq -r '.result[] | select(.status != "active") | "\(.name)\t\(.revision)"' |
+		while read line; do snap remove "$(echo "$line" | cut -f 1)" --revision "$(echo "$line" | cut -f 2)"; done
+}
+
+upgrade_flatpak() {
+	if ! command -v flatpak > /dev/null 2>&1; then return; fi
+
+	flatpak update -y
+	flatpak uninstall --unused
+}
+
+pull_usr_local_src() {
+	if ! [ -d '/usr/local/src' ]; then return; fi
+
+	for possible_repo in $(ls /usr/local/src); do
+		try_pull_git_repo "/usr/local/src/$possible_repo"
+	done
+}
+
+upgrade_brew() {
+	if ! command -v brew > /dev/null 2>&1; then return; fi
+
+	brew update
+	brew upgrade
+	brew autoremove
+	brew cleanup -s
+}
+
+pull_home_local_src() {
+	for possible_repo in $(ls "$HOME/.local/src"); do
+		try_pull_git_repo "$HOME/.local/src/$possible_repo"
+	done
+}
+
+set_up_dotfiles() {
+	"$HOME/.local/src/dotfiles/setup.sh"
+}
+
+upgrade_asdf() {
+	if ! command -v asdf > /dev/null 2>&1; then return; fi
+
+	for plugin in $(asdf plugin list); do
+		echo "Upgrading ${plugin}…"
+
+		asdf plugin update "$plugin"
+
+		if [ "$plugin" = 'ruby' ]; then
+			for version in $(asdf_list "$plugin"); do
+				(
+					export ASDF_RUBY_VERSION="$version"
+					upgrade_ruby
+				)
+			done
+		elif [ "$plugin" = 'nodejs' ]; then
+			for version in $(asdf_list "$plugin"); do
+				(
+					export ASDF_NODEJS_VERSION="$version"
+					upgrade_node
+				)
+			done
+		elif [ "$plugin" = 'python' ]; then
+			for version in $(asdf_list "$plugin"); do
+				(
+					export ASDF_PYTHON_VERSION="$version"
+					upgrade_python
+				)
+			done
+		elif [ "$plugin" = 'elixir' ]; then
+			for version in $(asdf_list "$plugin"); do
+				(
+					export ASDF_ELIXIR_VERSION="$version"
+					upgrade_elixir
+				)
+			done
+		fi
+	done
+}
+
 upgrade_ruby() {
-	if ruby -e "exit Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') ? 0 : 1"; then
-		ruby_version="$(ruby -e 'puts RUBY_VERSION')"
+	if ! ruby -e "exit Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') ? 0 : 1"; then return; fi
 
-		echo "Updating default gems for Ruby ${ruby_version}…"
-		gem list | grep -E '^[^[:space:]]+[[:space:]]+\(([^[:space:])]+,[[:space:]]*)*default:' | cut -d ' ' -f 1 | xargs gem update
-		echo
+	ruby_version="$(ruby -e 'puts RUBY_VERSION')"
 
-		echo "Updating user default gems for Ruby ${ruby_version}…"
-		xargs gem update < "$HOME/.default-gems"
-		echo
+	echo "Updating default gems for Ruby ${ruby_version}…"
+	gem list | grep -E '^[^[:space:]]+[[:space:]]+\(([^[:space:])]+,[[:space:]]*)*default:' | cut -d ' ' -f 1 | xargs gem update
 
-		echo "Updating RubyGems for Ruby ${ruby_version}…"
-		gem update --system
-		echo
-	fi
+	echo "Updating user default gems for Ruby ${ruby_version}…"
+	xargs gem update < "$HOME/.default-gems"
+
+	echo "Updating RubyGems for Ruby ${ruby_version}…"
+	gem update --system
 }
 
 upgrade_node() {
@@ -61,7 +154,6 @@ upgrade_node() {
 	else
 		xargs npm update --global < "$HOME/.default-npm-packages"
 	fi
-	echo
 
 	corepack enable || true
 }
@@ -71,142 +163,26 @@ upgrade_python() {
 
 	echo "Updating default packages for Python $python_version"
 	xargs pip install --upgrade --upgrade-strategy eager < "$HOME/.default-python-packages"
-	echo
 }
 
 upgrade_elixir() {
-	if [ -f "$HOME/.default-mix-commands" ]; then
-		while read mix_command; do
-			mix $mix_command --force
-		done < "$HOME/.default-mix-commands"
-	fi
+	if ! [ -f "$HOME/.default-mix-commands" ]; then return; fi
+
+	while read mix_command; do
+		mix $mix_command --force
+	done < "$HOME/.default-mix-commands"
 }
 
 if [ "$(whoami)" = 'root' ] || ! command -v sudo > /dev/null 2>&1; then
-	if command -v apt-get > /dev/null 2>&1; then
-		apt-get update
-		apt-get --with-new-pkgs upgrade -y
-		apt-get autoremove -y
-		apt-get autoclean -y
-		echo
-	fi
+	sudo_upgrade
 
-	if command -v dnf > /dev/null 2>&1; then
-		dnf upgrade -y
-		dnf autoremove -y
-		echo
+	if [ -n "${SUMMER_UPDATE_ROOT_USER-}" ]; then
+		upgrade
 	fi
-
-	if command -v snap > /dev/null 2>&1; then
-		snap refresh
-		curl --silent --show-error --get --data select=all --unix-socket /run/snapd.socket http://localhost/v2/snaps |
-			jq -r '.result[] | select(.status != "active") | "\(.name)\t\(.revision)"' |
-			while read line; do snap remove "$(echo "$line" | cut -f 1)" --revision "$(echo "$line" | cut -f 2)"; done
-		echo
-	fi
-
-	if command -v flatpak > /dev/null 2>&1; then
-		flatpak update -y
-		flatpak uninstall --unused
-		echo
-	fi
-
-	if [ -d '/usr/local/src' ]; then
-		for possible_repo in $(ls /usr/local/src); do
-			try_pull_git_repo "/usr/local/src/$possible_repo"
-		done
-	fi
-fi
-
-if [ "$(whoami)" != 'root' ]; then
-	if command -v sudo > /dev/null 2>&1 && [ -z "${SUMMER_UPDATE_SKIP_ROOT-}" ]; then
+else
+	if command -v sudo > /dev/null 2>&1 && [ -z "${SUMMER_UPDATE_NO_SUDO-}" ]; then
 		sudo "$(realpath "$0")" "$@" # Re-run script with sudo
 	fi
 
-	if command -v brew > /dev/null 2>&1; then
-		brew update
-		brew upgrade
-		brew autoremove
-		brew cleanup -s
-		echo
-	fi
-
-	for possible_repo in $(ls "$HOME/.local/src"); do
-		try_pull_git_repo "$HOME/.local/src/$possible_repo"
-	done
-
-	"$HOME/.local/src/dotfiles/setup.sh"
-	echo
-
-	if command -v asdf > /dev/null 2>&1; then
-		for plugin in $(asdf plugin list); do
-			echo "Upgrading ${plugin}…"
-
-			asdf plugin update "$plugin"
-
-			if [ "$plugin" = 'ruby' ]; then
-				for version in $(asdf_list "$plugin"); do
-					(
-						export ASDF_RUBY_VERSION="$version"
-						upgrade_ruby
-					)
-				done
-			elif [ "$plugin" = 'nodejs' ]; then
-				for version in $(asdf_list "$plugin"); do
-					(
-						export ASDF_NODEJS_VERSION="$version"
-						upgrade_node
-					)
-				done
-			elif [ "$plugin" = 'python' ]; then
-				for version in $(asdf_list "$plugin"); do
-					(
-						export ASDF_PYTHON_VERSION="$version"
-						upgrade_python
-					)
-				done
-			elif [ "$plugin" = 'elixir' ]; then
-				for version in $(asdf_list "$plugin"); do
-					(
-						export ASDF_ELIXIR_VERSION="$version"
-						upgrade_elixir
-					)
-				done
-			fi
-		done
-	fi
-
-	pull_rbenv_ish rbenv
-	if command -v rbenv > /dev/null 2>&1; then
-		for ruby_version in $(rbenv versions --bare); do
-			(
-				export RBENV_VERSION="$ruby_version"
-				upgrade_ruby
-			)
-		done
-	fi
-
-	pull_rbenv_ish nodenv
-	if command -v nodenv > /dev/null 2>&1; then
-		for node_version in $(nodenv versions --bare); do
-			(
-				export NODENV_VERSION="$node_version"
-				upgrade_node
-			)
-		done
-	fi
-
-	pull_rbenv_ish pyenv
-	if command -v pyenv > /dev/null 2>&1; then
-		for python_version in $(pyenv versions --bare); do
-			(
-				export PYENV_VERSION="$python_version"
-				upgrade_python
-			)
-		done
-	fi
-
-	pull_rbenv_ish erlenv
-	pull_rbenv_ish exenv
-	pull_rbenv_ish jenv
+	upgrade
 fi
