@@ -45,7 +45,7 @@ until [ -z "$files" ]; do
 		if [ "$dir" = '.gnupg' ]; then chmod 700 "$dest_dir"; fi
 	fi
 
-	if diff -q "$f" "$dest_f" > /dev/null 2>&1; then
+	if diff -q "$source_f" "$dest_f" > /dev/null 2>&1; then
 		echo "Skipping identical $f"
 		continue
 	fi
@@ -63,7 +63,7 @@ until [ -z "$files" ]; do
 					mv "$dest_f" "$dest_f.bak"
 				fi
 			elif [ "$resp" = 'd' ]; then
-				diff "$dest_f" "$f" || true
+				diff "$dest_f" "$source_f" || true
 			elif [ "$resp" = 'q' ]; then
 				exit 0
 			else
