@@ -61,6 +61,13 @@ upgrade_flatpak() {
 	flatpak uninstall --unused
 }
 
+upgrade_fwupdmgr() {
+	if ! command -v fwupdmgr > /dev/null 2>&1; then return; fi
+
+	fwupdmgr refresh --force
+	fwupdmgr update
+}
+
 pull_usr_local_src() {
 	if ! [ -d '/usr/local/src' ]; then return; fi
 
