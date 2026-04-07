@@ -72,6 +72,42 @@ abbr_path() {
 	done | $tac | tr $'\n' '/' | sed 's/\/$//'
 }
 
+color() {
+	echo -n '\[\033['
+	local print_semicolon=''
+	for color in "$@"; do
+		if [ -n "$print_semicolon" ]; then
+			echo -n ';'
+		else
+			local print_semicolon='1'
+		fi
+		# https://misc.flogisoft.com/bash/tip_colors_and_formatting
+		case "$color" in
+			'reset_all') echo -n '0' ;;
+
+			'bold') echo -n '1' ;;
+			'dim') echo -n '2' ;;
+
+			'reset_bold') echo -n '21' ;;
+			'reset_dim') echo -n '22' ;;
+
+			'bg_default') echo -n '49' ;;
+			'bg_red') echo -n '41' ;;
+			'bg_green') echo -n '42' ;;
+			'bg_blue') echo -n '44' ;;
+			'bg_magenta') echo -n '45' ;;
+
+			'fg_default') echo -n '39' ;;
+			'fg_red') echo -n '31' ;;
+			'fg_green') echo -n '32' ;;
+			'fg_blue') echo -n '34' ;;
+			'fg_magenta') echo -n '35' ;;
+			'fg_white') echo -n '97' ;;
+		esac
+	done
+	echo -n 'm\]'
+}
+
 # Make less more friendly for non-text input files, see lesspipe(1)
 if [ -x '/usr/bin/lesspipe' ]; then
 	eval "$(SHELL=/bin/sh lesspipe)"
@@ -82,7 +118,9 @@ if [ -z "${debian_chroot:-}" ] && [ -r '/etc/debian_chroot' ]; then
 fi
 
 case "$TERM" in
-	xterm-color|*-256color) color_prompt=yes;;
+	xterm-color|*-256color)
+		export CLICOLOR='1'
+		export COLORTERM='1'
 esac
 
 # __git_ps1 may already be sourced from e.g. /etc/bash_completion.d/git-prompt
@@ -104,43 +142,63 @@ GIT_PS1_STATESEPARATOR=
 GIT_PS1_COMPRESSSPARSESTATE=true
 GIT_PS1_SHOWCONFLICTSTATE=yes
 
-if [ "$color_prompt" = yes ]; then
-	# https://misc.flogisoft.com/bash/tip_colors_and_formatting
+if [ -n "$CLICOLOR" ] && [ -n "$POWERLINE" ]; then
+	PS1=$(tr -d $'\n' <<- EOF
+		\$([ "\$(id -u)" = '0' ] && echo '$(color bg_red)' || echo '$(color bg_magenta)')
+		$(color fg_white bold)
+		\${debian_chroot:+(\$debian_chroot)}\\u@\\h
 
-	if [ -n "$POWERLINE" ]; then
-		if [ -n "$ABBR_PATH" ]; then
-			PS1='${debian_chroot:+($debian_chroot)}\[\033[1;97;$([ "$(id -u)" = 0 ] && echo 41 || echo 45)m\]\u@\h\[\033[21;24;$([ "$(id -u)" = 0 ] && echo 31 || echo 35);44m\]\[\033[1;97m\]$(abbr_path . "\[\033[2m\]*\[\033[22;1m\]" 1)\[\033[34m\]$(__git_ps1 "\[\033[21;24;34;42m\]\[\033[1;97m\]%s\[\033[32m\]")\[\033[49m\]\[\033[0m\]'
-		else
-			PS1='${debian_chroot:+($debian_chroot)}\[\033[1;97;$([ "$(id -u)" = 0 ] && echo 41 || echo 45)m\]\u@\h\[\033[21;24;$([ "$(id -u)" = 0 ] && echo 31 || echo 35);44m\]\[\033[1;97m\]\w\[\033[34m\]$(__git_ps1 "\[\033[21;24;34;42m\]\[\033[1;97m\]%s\[\033[32m\]")\[\033[49m\]\[\033[0m\]'
-		fi
-	else
-		if [ -n "$ABBR_PATH" ]; then
-			PS1='${debian_chroot:+($debian_chroot)}\[\033[1;$([ "$(id -u)" = 0 ] && echo 31 || echo 35)m\]\u@\h\[\033[0m\]:\[\033[1;34m\]$(abbr_path . "\[\033[2m\]*\[\033[22;1m\]" 1)\[\033[0m\]$(__git_ps1 "@\[\033[1;32m\]%s\[\033[0m\]")\[\033[35m\]\$\[\033[0m\] '
-		else
-			PS1='${debian_chroot:+($debian_chroot)}\[\033[1;$([ "$(id -u)" = 0 ] && echo 31 || echo 35)m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[0m\]$(__git_ps1 "@\[\033[1;32m\]%s\[\033[0m\]")\[\033[35m\]\$\[\033[0m\] '
-		fi
-	fi
+		$(color bg_blue)
+		\$([ "\$(id -u)" = '0' ] && echo '$(color fg_red)' || echo '$(color fg_magenta)')
+		
 
-	# For macOS
-	export CLICOLOR=true
+		$(color fg_white)
+		\$([ -n "\$ABBR_PATH" ] && abbr_path . '$(color dim)*$(color reset_dim bold)' 1 || echo '\w')
+
+		$(color fg_blue)
+		\$(__git_ps1 '$(color bg_green)$(color fg_white)%s$(color fg_green)')
+
+		$(color bg_default)
+		
+
+		$(color bg_default fg_default reset_bold reset_underline)
+	EOF
+	)
+elif [ -n "$CLICOLOR" ]; then
+	PS1=$(tr -d $'\n' <<- EOF
+		\$([ "\$(id -u)" = '0' ] && echo '$(color fg_red)' || echo '$(color fg_magenta)')
+		$(color bold)
+		\${debian_chroot:+(\$debian_chroot)}\\u@\\h
+
+		$(color fg_default reset_bold reset_underline)
+		:
+
+		$(color fg_blue bold)
+		\$([ -n "\$ABBR_PATH" ] && abbr_path . '$(color fg_white dim)*$(color reset_dim fg_blue bold)' 1 || echo '\w')
+
+		$(color fg_default reset_bold reset_underline)
+		\$(__git_ps1 '@$(color fg_green bold)%s$(color fg_default reset_bold reset_underline)')
+
+		\$([ "\$(id -u)" = '0' ] && echo '$(color fg_red)#' || echo '$(color fg_magenta)\$')
+
+		$(color fg_default)
+		$(echo ' ')
+	EOF
+	)
 else
-	if [ -n "$ABBR_PATH" ]; then
-		PS1='${debian_chroot:+($debian_chroot)}\u@\h:$(abbr_path . "*" 1)$(__git_ps1 "@%s")\$ '
-	else
-		PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 "@%s")\$ '
-	fi
+	PS1=$(tr -d $'\n' <<- EOF
+		\${debian_chroot:+(\$debian_chroot)}\u@\h
+		:
+		\$([ -n "\$ABBR_PATH" ] && abbr_path . '*' 1 || echo '\w')
+		\$(__git_ps1 '@%s')
+		\$
+		$(echo ' ')
+	EOF
+	)
 fi
-unset color_prompt
 
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-	xterm*|rxvt*)
-		PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-		;;
-	*)
-		;;
-esac
-PROMPT_COMMAND='echo -en "\033]0;$(whoami)@$(hostname -s):$(dirs -0)$(__git_ps1 "@%s")\a"'
+case "$TERM" in xterm*|rxvt*) PS1="\[\e]0;\${debian_chroot:+(\$debian_chroot)}\u@\h: \w\a\]$PS1"; esac
+PROMPT_COMMAND='echo -en "\033]0;${debian_chroot:+($debian_chroot)}$(whoami)@$(hostname -s):$(dirs -0)$(__git_ps1 "@%s")\a"'
 
 if command -v dircolors > /dev/null 2>&1; then
 	if [ -r "$HOME/.dircolors" ]; then
@@ -161,6 +219,8 @@ fi
 if diff --color=auto /dev/null /dev/null > /dev/null 2>&1; then
 	alias diff='diff --color=auto'
 fi
+
+unset color
 
 if [ -f "$HOME/.bash_aliases" ]; then
 	. "$HOME/.bash_aliases"
