@@ -254,6 +254,7 @@ if ! shopt -oq posix; then
 				. "$completion"
 			fi
 		done
+		unset completion
 	fi
 
 

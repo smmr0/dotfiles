@@ -1,5 +1,5 @@
 add_to_path() {
-	new_path="$1"
+	local new_path="$1"
 
 	if [ -d "$new_path" ]; then
 		PATH="$new_path:$PATH"
@@ -7,8 +7,8 @@ add_to_path() {
 }
 
 configure_rbenv_ish() {
-	dir="$1"
-	command="$2"
+	local dir="$1"
+	local command="$2"
 
 	add_to_path "$dir/bin"
 
@@ -40,6 +40,7 @@ if [ -d '/opt/homebrew' ]; then
 	eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 PATH="$path_without_brew:$PATH" # Move Homebrew to end of `PATH`
+unset path_without_brew
 
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
@@ -70,6 +71,9 @@ add_to_path "$HOME/.yarn/bin"
 
 add_to_path "$HOME/.local/bin"
 add_to_path "$HOME/bin"
+
+unset configure_rbenv_ish
+unset add_to_path
 
 if command -v pathmerge > /dev/null 2>&1; then
 	# http://membled.com/work/apps/pathmerge/
