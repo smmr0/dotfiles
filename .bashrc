@@ -261,10 +261,6 @@ if ! shopt -oq posix; then
 	if [ -n "$NVM_DIR" ] && [ -f "$NVM_DIR/bash_completion" ]; then
 		. "$NVM_DIR/bash_completion"
 	fi
-
-	if command -v doctl > /dev/null 2>&1; then
-		source <(doctl completion bash)
-	fi
 fi
 
 if command -v pyenv > /dev/null 2>&1; then
