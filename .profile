@@ -42,6 +42,12 @@ fi
 PATH="$path_without_brew:$PATH" # Move Homebrew to end of `PATH`
 unset path_without_brew
 
+if command -v brew > /dev/null 2>&1; then
+	export LDFLAGS="${LDFLAGS:+$LDFLAGS }-L$(brew --prefix)/lib"
+	export CPPFLAGS="${CPPFLAGS:+$CPPFLAGS }-I$(brew --prefix)/include"
+	export PKG_CONFIG_PATH="${PKG_CONFIG_PATH:+$PKG_CONFIG_PATH:}$(brew --prefix)/lib/pkgconfig"
+fi
+
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
 
@@ -88,6 +94,18 @@ if [ -n "$XDG_DATA_DIRS" ]; then
 	if command -v pathmerge > /dev/null 2>&1; then
 		export XDG_DATA_DIRS="$(pathmerge "$XDG_DATA_DIRS")"
 	fi
+fi
+
+if [ -n "$LDFLAGS" ] && command -v pathmerge > /dev/null 2>&1; then
+	export LDFLAGS="$(pathmerge ":$(echo "$LDFLAGS" | tr ' ' ':')" | sed 's/^://' | tr ':' ' ')"
+fi
+
+if [ -n "$CPPFLAGS" ] && command -v pathmerge > /dev/null 2>&1; then
+	export CPPFLAGS="$(pathmerge ":$(echo "$CPPFLAGS" | tr ' ' ':')" | sed 's/^://' | tr ':' ' ')"
+fi
+
+if [ -n "$PKG_CONFIG_PATH" ] && command -v pathmerge > /dev/null 2>&1; then
+	export PKG_CONFIG_PATH="$(pathmerge "$PKG_CONFIG_PATH")"
 fi
 
 if [ -n "$BASH_VERSION" ]; then
